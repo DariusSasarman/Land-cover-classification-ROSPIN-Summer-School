@@ -1,0 +1,11 @@
+data/raw/
+models/
+.venv/
+venv/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.idea/
+*.pt
+*.h5
+*.pkl
