@@ -1,0 +1,29 @@
+                      precision    recall  f1-score   support
+
+          AnnualCrop       0.90      0.97      0.93       450
+              Forest       0.99      0.98      0.99       450
+HerbaceousVegetation       0.96      0.98      0.97       450
+             Highway       0.98      0.98      0.98       375
+          Industrial       0.99      0.97      0.98       375
+             Pasture       0.99      0.88      0.93       300
+       PermanentCrop       0.95      0.94      0.94       375
+         Residential       0.97      1.00      0.98       450
+               River       0.97      0.97      0.97       375
+             SeaLake       1.00      0.97      0.99       450
+
+            accuracy                           0.97      4050
+           macro avg       0.97      0.96      0.97      4050
+        weighted avg       0.97      0.97      0.97      4050
+
+
+Confusion Matrix:
+[[437   1   1   0   0   1   9   0   1   0]
+ [  0 442   8   0   0   0   0   0   0   0]
+ [  1   0 440   0   0   1   7   1   0   0]
+ [  1   0   0 369   0   0   0   1   4   0]
+ [  0   0   0   2 363   0   0  10   0   0]
+ [ 23   3   4   1   0 264   2   0   3   0]
+ [ 13   1   5   0   3   0 352   1   0   0]
+ [  0   0   1   0   1   0   0 448   0   0]
+ [  4   0   1   5   0   0   0   0 365   0]
+ [  8   0   0   0   0   0   0   0   5 437]]
