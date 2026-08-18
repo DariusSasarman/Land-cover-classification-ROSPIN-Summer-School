@@ -11,3 +11,6 @@ __pycache__/
 *.pkl
 checkpoints/
 *.npy
+*.pth
+*.tif
+*.tiff
