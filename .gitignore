@@ -9,3 +9,4 @@ __pycache__/
 *.pt
 *.h5
 *.pkl
+checkpoints/
