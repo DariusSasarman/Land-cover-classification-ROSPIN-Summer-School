@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from torchvision import transforms
-from torchvision.models import resnet50, ResNet50_Weights
+from torchvision.models import resnet18, ResNet18_Weights
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {DEVICE}")
@@ -16,10 +16,10 @@ except FileNotFoundError:
     exit()
 
 # 2. Define Model 
-class ResNet50_M3(nn.Module):
+class ResNet18_M3(nn.Module):
     def __init__(self):
         super().__init__()
-        self.model = resnet50(weights=ResNet50_Weights.DEFAULT)
+        self.model = resnet18(weights=ResNet18_Weights.DEFAULT)
         self.model.fc = nn.Sequential(
             nn.Linear(self.model.fc.in_features, 200),
             nn.ReLU(),
@@ -33,8 +33,8 @@ class ResNet50_M3(nn.Module):
         return self.model(x)
 
 # 3. Load the trained weights
-checkpoint_path = "checkpoints/resnet50_m3_best.pth"
-model = ResNet50_M3().to(DEVICE)
+checkpoint_path = "checkpoints/resnet18_m3_best.pth"
+model = ResNet18_M3().to(DEVICE)
 model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE)["model_state_dict"])
 model.eval()
 
