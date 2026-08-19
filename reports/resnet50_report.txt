@@ -1,0 +1,30 @@
+Classification Report (ResNet-50 Advanced):
+                      precision    recall  f1-score   support
+
+          AnnualCrop       0.97      0.97      0.97       450
+              Forest       0.99      1.00      0.99       450
+HerbaceousVegetation       0.99      0.96      0.97       450
+             Highway       0.99      0.98      0.98       375
+          Industrial       0.99      0.99      0.99       375
+             Pasture       0.97      0.99      0.98       300
+       PermanentCrop       0.97      0.96      0.97       375
+         Residential       1.00      0.99      0.99       450
+               River       0.98      0.99      0.99       375
+             SeaLake       0.99      1.00      0.99       450
+
+            accuracy                           0.98      4050
+           macro avg       0.98      0.98      0.98      4050
+        weighted avg       0.98      0.98      0.98      4050
+
+
+Confusion Matrix:
+[[438   0   0   1   0   1   7   0   1   2]
+ [  0 450   0   0   0   0   0   0   0   0]
+ [  4   4 430   1   0   6   4   0   0   1]
+ [  0   0   0 368   0   1   0   0   6   0]
+ [  0   0   0   1 372   0   0   2   0   0]
+ [  1   0   0   0   0 297   0   0   0   2]
+ [  8   0   4   0   1   0 361   0   1   0]
+ [  0   0   0   1   4   0   0 445   0   0]
+ [  0   1   0   1   0   0   0   0 373   0]
+ [  1   0   0   0   0   0   0   0   1 448]]
