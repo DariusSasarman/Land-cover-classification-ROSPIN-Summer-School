@@ -10,6 +10,7 @@ __pycache__/
 *.h5
 *.pkl
 checkpoints/
+model/
 *.npy
 *.pth
 *.tif

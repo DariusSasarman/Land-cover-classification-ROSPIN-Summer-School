@@ -15,13 +15,21 @@ except FileNotFoundError:
     print("Error: Could not find patches. Run tile_and_prepare_inference.py first!")
     exit()
 
+""" 
+Previously, the model was loaded here, 
+but now it is loaded by download_model.py and 
+saved to model/model.py and model/resnet18_m3_best.pth. 
+The following code is commented out because it is no longer needed. 
+The model is now loaded from the downloaded files in download_model.py. 
+The following code is kept for reference:
+
 # 2. Define Model 
 class ResNet18_M3(nn.Module):
     def __init__(self):
         super().__init__()
         self.model = resnet18(weights=ResNet18_Weights.DEFAULT)
         self.model.fc = nn.Sequential(
-            nn.Linear(self.model.fc.in_features, 200),
+             nn.Linear(self.model.fc.in_features, 200),
             nn.ReLU(),
             nn.Dropout(p=0.3),
             nn.Linear(200, 100),
@@ -32,11 +40,23 @@ class ResNet18_M3(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-# 3. Load the trained weights
+#3. Load the trained weights
 checkpoint_path = "checkpoints/resnet18_m3_best.pth"
 model = ResNet18_M3().to(DEVICE)
 model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE)["model_state_dict"])
 model.eval()
+"""
+
+# 2. and 3. Load the model with weights from model/resnet18_m3_best.pth
+
+try:
+    from model.model import ResNet18_M3
+except ImportError:
+    print("Error: Could not import ResNet18_M3 from model. Run download_model.py first!")
+    exit()
+
+model = ResNet18_M3.get_instance()
+
 
 # 4. Normalize the satellite pixels to look like standard photos
 rgb_float = rgb_patches.astype(np.float32)
