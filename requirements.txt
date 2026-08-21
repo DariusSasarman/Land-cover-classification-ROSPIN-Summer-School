@@ -7,3 +7,4 @@ pandas
 matplotlib
 earthengine-api
 rasterio
+huggingface_hub
