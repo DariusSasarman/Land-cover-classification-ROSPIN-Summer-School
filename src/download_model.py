@@ -37,5 +37,6 @@ if __name__ == "__main__":
   # Download model to "repo/model"
   model_path = os.path.join(repo_root, "model")
   os.makedirs(model_path,exist_ok=True)
-  
+  # Create an empty __init__.py file in the model directory to make it a package
+  open(os.path.join(model_path, "__init__.py"), "a").close()
   download_model(model_path)
