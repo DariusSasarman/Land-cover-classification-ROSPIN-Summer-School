@@ -30,7 +30,27 @@ You should see a "./model" folder appear.
 
 This step downloads / instantiates the fine-tuned model.
 
-### 2. Download the Sentinel-2 tiles
+### 2. Download the Sentinel-2 data
+
+```bash
+
+python3 ./src/download_sentinel2_copernicus.py
+
+```
+
+or 
+
+```bash
+
+python3 ./src/download_sentinel2.py
+
+```
+
+Both scripts should download similar "./data/raw/sentinel2_aoi.tif".
+
+The first one uses the Copernicus api and the second one uses the Google Earth Engine.
+
+### 3. Tile the Sentinel-2 image
 
 ```bash
 
@@ -40,9 +60,9 @@ python3 ./src/tile_and_prepare_inference.py
 
 Should see "./data/processed/tiles" appear.
 
-This step downloads and tiles the Sentinel-2 data of our target location.
+This step tiles the Sentinel-2 data of our target location.
 
-### 3. Run inference on the target tiles
+### 4. Run inference on the target tiles
 
 #### !!! This step is computationally intensive. Run it on a machine capable of handling it !!!
 
@@ -56,7 +76,7 @@ Should see "./data/processed/tiles/predictions.npy" appear.
 
 This step runs inference on the specified location.
 
-### 4. Display inference on the map
+### 5. Display inference on the map
 
 ```bash
 
@@ -70,4 +90,4 @@ The map inside said window represents the inference applied on the map.
 
 <sub> Currently, said map isn't saved.</sub>
 
-### 5. Etc ( work in progress )
+### 6. Etc ( work in progress )

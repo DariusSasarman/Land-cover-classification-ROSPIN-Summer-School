@@ -2,7 +2,13 @@ import ee
 
 ee.Authenticate()
 
-ee.Initialize(project='canvas-provider-505813-b6')
+print("Please enter your Google Earth Engine canvas project ID. " \
+"\nYou can find it at https://code.earthengine.google.com/ under 'Project' in the top right corner.")
+
+#project_id = 'canvas-provider-505813-b6'
+project_id = input("Project ID: ")
+
+ee.Initialize(project=project_id)
 print(ee.String('Earth Engine connected successfully').getInfo())
 
 lat_min, lat_max = 46.743444, 46.800056
