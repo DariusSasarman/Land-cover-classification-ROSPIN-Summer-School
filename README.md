@@ -88,6 +88,6 @@ A window should appear on your screen.
 
 The map inside said window represents the inference applied on the map.
 
-<sub> Currently, said map isn't saved.</sub>
+You can zoom in/out and change the the transparency level of the classification.
 
-### 6. Etc ( work in progress )
+There's also a button that saves the current state of the plot as a png.
