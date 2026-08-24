@@ -8,3 +8,5 @@ matplotlib
 earthengine-api
 rasterio
 huggingface_hub
+oauthlib
+requests-oauthlib

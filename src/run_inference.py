@@ -3,6 +3,12 @@ import torch.nn as nn
 import numpy as np
 from torchvision import transforms
 from torchvision.models import resnet18, ResNet18_Weights
+import sys, os
+
+# Appending parent folder so the model import works
+# Hacky, but doesn't need to install the package in the environment
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {DEVICE}")
