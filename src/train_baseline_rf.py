@@ -9,11 +9,20 @@ os.makedirs("reports", exist_ok=True)
 
 dataset = EuroSAT(root="data/raw", download=True)
 
+sample_image, sample_label = dataset[0]
+
+print("Image type:", type(sample_image))
+print("Image size:", sample_image.size)
+print("Label:", sample_label)
+print("Classes:", dataset.classes)
+
 with open("data/processed/splits.json") as f:
     splits = json.load(f)
 
 def extract_band_stats(image):
     arr = np.array(image)
+
+    print("Array shape:", arr.shape)
     stats = []
     for c in range(arr.shape[-1]):
         band = arr[:, :, c]
