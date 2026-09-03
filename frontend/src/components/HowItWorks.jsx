@@ -1,17 +1,17 @@
 export default function HowItWorks() {
   const steps = [
     {
-      title: 'Define your AOI',
+      title: 'You define your Area of Interest (AOI)',
       text: 'Draw or upload a polygon for the region you want monitored.',
     },
     {
-      title: 'ResNet inference',
-      text: 'Sentinel-2 patches are classified into 10 EuroSAT land-cover classes.',
+      title: 'We execute the analysis',
+      text: 'LandObservator runs fine-tuned models on your AOI to produce land-cover statistics and visualizations',
     },
     {
-      title: 'Track over time',
-      text: 'Quarterly snapshots reveal seasonal shifts in crops, water, and built-up areas.',
-    },
+      title: 'You get the insights',
+      text: 'Analyze the results to make informed decisions about your area of interest.',
+    }
   ]
 
   return (

@@ -8,7 +8,7 @@ export default function TimeSeriesChart({ area, classId }) {
 
   const width = 320
   const height = 120
-  const padX = 8
+  const padX = 26
   const padY = 12
   const innerW = width - padX * 2
   const innerH = height - padY * 2
@@ -44,6 +44,16 @@ export default function TimeSeriesChart({ area, classId }) {
             className="time-series__grid"
           />
         ))}
+        {[0, 0.25, 0.5, 0.75, 1].map((t) => (
+          <text
+            key={`label-${t}`}
+            x={2}
+            y={padY + innerH * (1 - t) - 2}
+            className="time-series__ylabel"
+          >
+            {Math.round(max * t)}%
+          </text>
+        ))}
         <polyline
           points={points}
           fill="none"
@@ -66,11 +76,7 @@ export default function TimeSeriesChart({ area, classId }) {
           )
         })}
       </svg>
-      <div className="time-series__axis">
-        {periods.map((p) => (
-          <span key={p}>{p.replace('-', ' ')}</span>
-        ))}
-      </div>
+      
     </div>
   )
 }
