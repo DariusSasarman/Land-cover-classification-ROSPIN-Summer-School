@@ -2,7 +2,7 @@ export default function HowItWorks() {
   const steps = [
     {
       title: 'You define your Area of Interest (AOI)',
-      text: 'Draw or upload a polygon for the region you want monitored.',
+      text: 'Select the region you want monitored.',
     },
     {
       title: 'We execute the analysis',

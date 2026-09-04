@@ -2,7 +2,7 @@ import { EUROSAT_CLASS_BY_ID } from '../data/eurosatLabels.js'
 
 export default function ClassificationChart({ snapshot }) {
   const entries = Object.entries(snapshot)
-    .filter(([, pct]) => pct > 0)
+    .filter(([classId, pct]) => pct > 0 && EUROSAT_CLASS_BY_ID[classId])
     .sort((a, b) => b[1] - a[1])
 
   return (
