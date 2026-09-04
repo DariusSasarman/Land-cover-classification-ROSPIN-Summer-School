@@ -1,9 +1,41 @@
 import { EUROSAT_CLASS_BY_ID } from '../data/eurosatLabels.js'
-import { getPeriodsForArea, getSnapshot } from '../data/demoAreas.js'
 
-export default function TimeSeriesChart({ area, classId }) {
-  const periods = getPeriodsForArea(area)
-  const values = periods.map((p) => getSnapshot(area, p)[classId] ?? 0)
+function parsePercentages(historyItem, classId) {
+  const meta = EUROSAT_CLASS_BY_ID[classId]
+  const percentages = historyItem?.Classification?.Percentages ?? {}
+
+  if (percentages[classId] !== undefined) {
+    return Number.parseFloat(String(percentages[classId]).replace('%', '')) || 0
+  }
+  if (meta?.label && percentages[meta.label] !== undefined) {
+    return Number.parseFloat(String(percentages[meta.label]).replace('%', '')) || 0
+  }
+
+  const found = Object.entries(percentages).find(([key]) => {
+    return key === classId || key === meta?.label || key.replace(/\s+/g, '') === classId
+  })
+
+  if (found) {
+    return Number.parseFloat(String(found[1]).replace('%', '')) || 0
+  }
+
+  return 0
+}
+
+export default function TimeSeriesChart({ history, classId }) {
+  const meta = EUROSAT_CLASS_BY_ID[classId]
+
+  if (!history.length || !meta) {
+    return (
+      <div className="time-series">
+        <h3 className="section-label">Time series</h3>
+        <p className="demo-viewer__insight-secondary">No history is available yet.</p>
+      </div>
+    )
+  }
+
+  const periods = history.map((item) => item?.Classification?.['period desc'] ?? '')
+  const values = history.map((item) => parsePercentages(item, classId))
   const max = Math.max(...values, 1)
 
   const width = 320
@@ -21,13 +53,9 @@ export default function TimeSeriesChart({ area, classId }) {
     })
     .join(' ')
 
-  const meta = EUROSAT_CLASS_BY_ID[classId]
-
   return (
     <div className="time-series">
-      <h3 className="section-label">
-        {meta.label} over time
-      </h3>
+      <h3 className="section-label">{meta.label} over time</h3>
       <svg
         className="time-series__svg"
         viewBox={`0 0 ${width} ${height}`}
@@ -76,7 +104,6 @@ export default function TimeSeriesChart({ area, classId }) {
           )
         })}
       </svg>
-      
     </div>
   )
 }

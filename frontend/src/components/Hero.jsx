@@ -30,8 +30,8 @@ export default function Hero() {
         </div>
 
         <div className="hero__stat">
-          <strong>4×</strong>
-          <span>seasonal observations</span>
+          <strong>Sentinel-2</strong>
+          <span>periodic observations</span>
         </div>
       </div>
     </section>

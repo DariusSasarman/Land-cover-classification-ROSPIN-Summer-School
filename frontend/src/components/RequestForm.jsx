@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { createRequest } from '../utils/requestApi.js'
+import { submitAoiRequest } from '../utils/requestApi.js'
 
 const INITIAL = {
   name: '',
@@ -9,6 +9,8 @@ const INITIAL = {
   organization: '',
   region: '',
   frequency: 'quarterly',
+  startDate: '',
+  endDate: '',
   notes: '',
 }
 
@@ -106,7 +108,7 @@ export default function RequestForm() {
     }
   }
 
-  function createRequestPayload() {
+  function submitAoiRequestPayload() {
     return {
       requester: {
         name: form.name,
@@ -116,8 +118,8 @@ export default function RequestForm() {
       },
       monitoring: {
         frequency: form.frequency,
-        startDate: form.startDate || null,
-        endDate: form.endDate || null,
+        startDate: form.startDate,
+        endDate: form.endDate,
         notes: form.notes,
       },
       area: selection,
@@ -183,7 +185,7 @@ export default function RequestForm() {
     setSubmitting(true)
 
     try {
-      await createRequest(createRequestPayload())
+      await submitAoiRequest(submitAoiRequestPayload())
       setSubmitted(true)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit the request.')
@@ -306,7 +308,7 @@ export default function RequestForm() {
           <h2>Request received</h2>
           <p>
             Thanks, {form.name || 'there'}. Your personal area-of-interest request
-            has been queued.
+            has been queued. You'll receive an email with a quote and further instructions once the request has been processed.
           </p>
           
           <button
@@ -467,7 +469,7 @@ export default function RequestForm() {
         </div>
 
         <div className="form__row">
-          <label> Ending date</label>
+          <label> End date</label>
           <input
             id="endDate"
             name="endDate"
@@ -476,6 +478,7 @@ export default function RequestForm() {
             onChange={handleChange}
           />
         </div>
+
         
         <div className="form__row">
           <label htmlFor="region">Region of interest</label>

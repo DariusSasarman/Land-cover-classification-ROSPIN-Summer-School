@@ -1,4 +1,5 @@
-import { EUROSAT_CLASSES } from '../data/eurosatLabels.js'
+
+import { EUROSAT_CLASSES, EUROSAT_CLASS_BY_ID } from '../data/eurosatLabels.js'
 
 /** Deterministic pseudo-random for stable patch layout per period */
 function seededPick(seed, weights) {
