@@ -5,10 +5,14 @@ import DemoExplorer from './components/DemoExplorer.jsx'
 import HowItWorks from './components/HowItWorks.jsx'
 import RequestForm from './components/RequestForm.jsx'
 import Footer from './components/Footer.jsx'
+import Login from './components/Login.jsx'
+import DisplayListAOI from './components/DisplayListAOI.jsx'
+import { useAuth } from './context/AuthContext.jsx'
 import './App.css'
 
 function App() {
   const [activeTab, setActiveTab] = useState('hero')
+  const { isAuthenticated } = useAuth()
 
   return (
     <div className="app">
@@ -17,7 +21,8 @@ function App() {
         {activeTab === 'hero' && <Hero />}
         {activeTab === 'demos' && <DemoExplorer />}
         {activeTab === 'how-it-works' && <HowItWorks />}
-        {activeTab === 'request' && <RequestForm />}
+        {activeTab === 'request' && <RequestForm setActiveTab={setActiveTab} />}
+        {activeTab === 'login' && (isAuthenticated ? <DisplayListAOI /> : <Login />)}
       </main>
       <Footer />
     </div>

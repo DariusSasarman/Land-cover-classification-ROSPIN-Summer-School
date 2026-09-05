@@ -2,16 +2,38 @@ import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { submitAoiRequest } from '../utils/requestApi.js'
+import { useAuth } from '../context/AuthContext.jsx'
+
+const STORAGE_KEY = 'landobservator_aoi_draft'
 
 const INITIAL = {
-  name: '',
-  email: '',
-  organization: '',
   region: '',
   frequency: 'quarterly',
   startDate: '',
   endDate: '',
   notes: '',
+}
+
+function loadDraft() {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) return { form: INITIAL, selection: null }
+    const parsed = JSON.parse(raw)
+    return {
+      form: { ...INITIAL, ...parsed.form },
+      selection: parsed.selection ?? null,
+    }
+  } catch {
+    return { form: INITIAL, selection: null }
+  }
+}
+
+function saveDraft(form, selection) {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ form, selection }))
+}
+
+function clearDraft() {
+  sessionStorage.removeItem(STORAGE_KEY)
 }
 
 const PIXEL_SIZE_M = 10
@@ -75,13 +97,16 @@ function selectionFromGrid(gx1, gy1, gx2, gy2) {
   }
 }
 
-export default function RequestForm() {
-  const [form, setForm] = useState(INITIAL)
+export default function RequestForm({ setActiveTab }) {
+  const { isAuthenticated, user, token } = useAuth()
+  const draft = useRef(loadDraft()).current
+  const [form, setForm] = useState(draft.form)
+  const [selection, setSelection] = useState(draft.selection)
   const [submitted, setSubmitted] = useState(false)
-  const [selection, setSelection] = useState(null)
   const [drawMode, setDrawMode] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const formRef = useRef(draft.form)
   const mapContainerRef = useRef(null)
   const mapRef = useRef(null)
   const rectLayerRef = useRef(null)
@@ -91,12 +116,18 @@ export default function RequestForm() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    setForm((prev) => {
+      const next = { ...prev, [name]: value }
+      formRef.current = next
+      saveDraft(next, selection)
+      return next
+    })
   }
 
   function clearSelection() {
     dragStateRef.current = { active: false, startGrid: null }
     setSelection(null)
+    saveDraft(formRef.current, null)
 
     if (rectLayerRef.current) {
       rectLayerRef.current.remove()
@@ -108,12 +139,12 @@ export default function RequestForm() {
     }
   }
 
-  function submitAoiRequestPayload() {
+  function buildPayload(currentUser) {
     return {
       requester: {
-        name: form.name,
-        email: form.email,
-        organization: form.organization,
+        name: currentUser.name,
+        email: currentUser.email,
+        organization: currentUser.organization,
         region: form.region,
       },
       monitoring: {
@@ -171,6 +202,7 @@ export default function RequestForm() {
     }
 
     setSelection(nextSelection)
+    saveDraft(formRef.current, nextSelection)
   }
 
   async function handleSubmit(e) {
@@ -181,11 +213,18 @@ export default function RequestForm() {
       return
     }
 
+    if (!isAuthenticated) {
+      saveDraft(formRef.current, selection)
+      setActiveTab('login')
+      return
+    }
+
     setSubmitError('')
     setSubmitting(true)
 
     try {
-      await submitAoiRequest(submitAoiRequestPayload())
+      await submitAoiRequest(buildPayload(user), token)
+      clearDraft()
       setSubmitted(true)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit the request.')
@@ -228,6 +267,17 @@ export default function RequestForm() {
 
     mapRef.current = map
     gridLayerRef.current = L.layerGroup().addTo(map)
+
+    if (selection) {
+      const sw = [selection.bbox_lonlat.south, selection.bbox_lonlat.west]
+      const ne = [selection.bbox_lonlat.north, selection.bbox_lonlat.east]
+      rectLayerRef.current = L.rectangle([sw, ne], {
+        color: '#ff6b35',
+        weight: 2,
+        fillOpacity: 0.12,
+      }).addTo(map)
+      map.fitBounds([sw, ne], { maxZoom: 15 })
+    }
 
     function snappedGridFromLatLng(latlng) {
       const [mx, my] = lonLatToMerc(latlng.lng, latlng.lat)
@@ -307,19 +357,21 @@ export default function RequestForm() {
         <div className="request-form__success">
           <h2>Request received</h2>
           <p>
-            Thanks, {form.name || 'there'}. Your personal area-of-interest request
+            Thanks, {user?.name || 'there'}. Your personal area-of-interest request
             has been queued. You'll receive an email with a quote and further instructions once the request has been processed.
           </p>
-          
+
           <button
             type="button"
             className="btn btn--secondary"
             onClick={() => {
               setSubmitted(false)
               setForm(INITIAL)
+              formRef.current = INITIAL
               clearSelection()
               setDrawMode(false)
               setSubmitError('')
+              clearDraft()
             }}
           >
             Submit another request
@@ -341,11 +393,15 @@ export default function RequestForm() {
       }}
     >
       <div className="request-form__intro" style={{ gridColumn: '1 / -1' }}>
-
-        <h2 style={{marginLeft: '1rem'}}>Request a personal AOI (area of interest)</h2>
-        <p className="request-form__intro-text" style={{marginLeft: '1rem'}}>
+        <h2 style={{ marginLeft: '1rem' }}>Request a personal AOI (area of interest)</h2>
+        <p className="request-form__intro-text" style={{ marginLeft: '1rem' }}>
           Require a personal land cover analysis for your area of interest? Fill out the form below to submit a request. We&apos;ll get back to you as soon as possible.
         </p>
+        {!isAuthenticated && (
+          <p className="request-form__intro-text" style={{ marginLeft: '1rem' }}>
+            You'll need an account to submit — we'll ask you to sign in once you hit submit, and your progress here will be saved.
+          </p>
+        )}
       </div>
 
       <div className="form__map-picker form__map-picker--standalone" style={{ gridColumn: 1 }}>
@@ -384,32 +440,6 @@ export default function RequestForm() {
         onSubmit={handleSubmit}
         style={{ gridColumn: 2 }}
       >
-        <div className="form__row">
-          <label htmlFor="name">Full name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Jane Doe"
-          />
-        </div>
-
-        <div className="form__row">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            value={form.email}
-            onChange={handleChange}
-            placeholder="jane@example.com"
-          />
-        </div>
-
         <div className="form__row form__row--full">
           <label>Chosen land surface</label>
           <div className="form__selection-field">
@@ -419,8 +449,7 @@ export default function RequestForm() {
                   <dt>Tile count : {selection.tile_count.total} total </dt>
                 </div>
                 <div>
-                  <dt>Grid range : 
-                    
+                  <dt>Grid range :
                     gx ∈ {'['}{selection.tile_grid_range.gx[0]},{selection.tile_grid_range.gx[1]}{']'} and gy ∈ {'['}{selection.tile_grid_range.gy[0]},{selection.tile_grid_range.gy[1]}{']'}
                   </dt>
                 </div>
@@ -456,9 +485,9 @@ export default function RequestForm() {
             <option value="annual">Annual</option>
           </select>
         </div>
-        
+
         <div className="form__row">
-          <label> Starting date</label>
+          <label>Starting date</label>
           <input
             id="startDate"
             name="startDate"
@@ -469,7 +498,7 @@ export default function RequestForm() {
         </div>
 
         <div className="form__row">
-          <label> End date</label>
+          <label>End date</label>
           <input
             id="endDate"
             name="endDate"
@@ -479,7 +508,6 @@ export default function RequestForm() {
           />
         </div>
 
-        
         <div className="form__row">
           <label htmlFor="region">Region of interest</label>
           <input
@@ -491,18 +519,7 @@ export default function RequestForm() {
             placeholder="Cluj-Napoca, Romania"
           />
         </div>
-        <div className="form__row">
-          <label htmlFor="organization">Organization / affiliation</label>
-          <input
-            id="organization"
-            name="organization"
-            type="text"
-            value={form.organization}
-            onChange={handleChange}
-            placeholder="University of Cluj-Napoca"
-          />
-        </div>
-        
+
         <div className="form__row form__row--full">
           <label htmlFor="notes">Additional notes (optional)</label>
           <textarea
@@ -516,10 +533,9 @@ export default function RequestForm() {
         </div>
 
         <button type="submit" className="btn btn--primary" disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Submit request'}
+          {submitting ? 'Submitting...' : isAuthenticated ? 'Submit request' : 'Continue to sign in'}
         </button>
         {submitError && <p className="form__error">{submitError}</p>}
-
       </form>
     </section>
   )

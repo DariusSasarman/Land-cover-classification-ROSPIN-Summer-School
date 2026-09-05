@@ -436,7 +436,7 @@ export async function getDemoAreaHistory({ areaId }) {
   if (stub) return stub
 
   // --- real API call (unreachable until stub above is removed) ---
-  const response = await fetch(`${REQUEST_ENDPOINT}/${areaId}`, {
+  const response = await fetch(`${REQUEST_ENDPOINT}/demo/${areaId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -448,11 +448,29 @@ export async function getDemoAreaHistory({ areaId }) {
   return response.json()
 }
 
-export async function submitAoiRequest(payload) {
-  return { ok : true}
-  const response = await fetch(REQUEST_ENDPOINT, {
+export async function fetchAoiList(jwt) {
+  const response = await fetch(`${REQUEST_ENDPOINT}/list`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${jwt}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`AOI list request failed: ${response.status}`)
+  }
+
+  return response.json()
+}
+
+export async function submitAoiRequest(payload, token) {
+  const response = await fetch(`${REQUEST_ENDPOINT}/createaoi`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     body: JSON.stringify(payload),
   })
 

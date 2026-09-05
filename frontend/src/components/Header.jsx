@@ -1,4 +1,7 @@
+import { useAuth } from '../context/AuthContext.jsx'
+
 export default function Header({ activeTab, setActiveTab }) {
+  const { isAuthenticated } = useAuth()
   const isActive = (tab) => (activeTab === tab ? 'is-active' : '')
 
   return (
@@ -9,9 +12,13 @@ export default function Header({ activeTab, setActiveTab }) {
           <span className="brand__text">Land<span>Observator</span></span>
         </a>
         <nav className="site-nav" aria-label="Main">
-          <a className={isActive('demos')} onClick={() => setActiveTab('demos')}>Public demos</a>
-          <a className={isActive('how-it-works')} onClick={() => setActiveTab('how-it-works')}>How it works</a>
+          <a className={`site-nav__cta ${isActive('login')}`} onClick={() => setActiveTab('login')}>
+            {isAuthenticated ? 'My AOIs' : 'Login'}
+          </a>
+          <a className={` ${isActive('demos')}`} onClick={() => setActiveTab('demos')}>Public demos</a>
+          <a className={` ${isActive('how-it-works')}`} onClick={() => setActiveTab('how-it-works')}>How it works</a>
           <a className={`site-nav__cta ${isActive('request')}`} onClick={() => setActiveTab('request')}>Request AOI</a>
+          
         </nav>
       </div>
     </header>
