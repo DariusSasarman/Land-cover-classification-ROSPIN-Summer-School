@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <pattern id="noise" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#1a2744"/>
+      <circle cx="2" cy="3" r="1" fill="#243b55" opacity="0.6"/>
+      <circle cx="6" cy="6" r="1" fill="#2d4a6a" opacity="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="520" fill="url(#sky)"/>
+  <rect x="40" y="60" width="720" height="400" fill="url(#noise)" opacity="0.9" rx="4"/>
+  <path d="M40 280 Q200 220 360 260 T720 240 L720 460 L40 460 Z" fill="#2d6a4f" opacity="0.45"/>
+  <path d="M40 320 Q180 300 320 340 T720 360 L720 460 L40 460 Z" fill="#40916c" opacity="0.35"/>
+  <path d="M520 60 L720 120 L720 200 L560 160 Z" fill="#0077b6" opacity="0.4"/>
+  <path d="M80 80 L200 100 L180 200 L60 180 Z" fill="#bc6c25" opacity="0.3"/>
+  <text x="400" y="500" text-anchor="middle" fill="#64748b" font-family="system-ui,sans-serif" font-size="13">Basemap placeholder</text>
+</svg>

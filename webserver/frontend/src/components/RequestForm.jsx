@@ -508,7 +508,7 @@ export default function RequestForm({ setActiveTab }) {
           />
         </div>
 
-        <div className="form__row">
+        <div className="form__row form__row--full">
           <label htmlFor="region">Region of interest</label>
           <input
             id="region"
