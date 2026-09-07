@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import LandCoverExplorer from './LandCoverExplorer.jsx'
-import { getDemoAreaHistory } from '../utils/requestApi.js'
-
-const DEMO_AREA_IDS = ['po-valley', 'black-forest', 'danube-delta']
+import { getDemoAreasHistory } from '../utils/requestApi.js'
 
 export default function DemoExplorer() {
   const [responses, setResponses] = useState([])
@@ -11,18 +9,16 @@ export default function DemoExplorer() {
   useEffect(() => {
     let active = true
 
-    async function loadDemoResponses() {
-      const data = await Promise.all(
-        DEMO_AREA_IDS.map(async (areaId) => {
-          const res = await getDemoAreaHistory({ areaId })
-          return { id: areaId, ...res }
-        })
-      )
-
-      if (!active) return
-
-      setResponses(data)
-      setLoading(false)
+     async function loadDemoResponses() {
+      try {
+        const data = await getDemoAreasHistory()
+        if (!active) return
+        setResponses(data)
+      } catch (err) {
+        if (active) setError(err.message)
+      } finally {
+        if (active) setLoading(false)
+      }
     }
 
     loadDemoResponses()

@@ -1,4 +1,4 @@
-const REQUEST_ENDPOINT = '/api/land-cover' // match requestApi.js
+const REQUEST_ENDPOINT = '/api/auth' // match requestApi.js
 
 export async function loginRequest(email, password) {
   const response = await fetch(`${REQUEST_ENDPOINT}/login`, {

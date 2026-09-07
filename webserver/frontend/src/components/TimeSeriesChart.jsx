@@ -34,7 +34,7 @@ export default function TimeSeriesChart({ history, classId }) {
     )
   }
 
-  const periods = history.map((item) => item?.Classification?.['period desc'] ?? '')
+  const periods = history.map((item) => item?.Classification?.period_desc ?? '')
   const values = history.map((item) => parsePercentages(item, classId))
   const max = Math.max(...values, 1)
 
