@@ -1,15 +1,19 @@
 """
-Compares reports/baseline_rf_report.txt (RGB stats) against
-reports/spectral_rf_report.txt (B08/B11/B12 + indices) and reports which
-one performed better. Run both training scripts first.
+Compares the available Random Forest and multispectral reports and
+reports which one performed better. Run the matching training scripts
+first.
 """
 
 import os
 import re
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPORTS_ROOT = os.path.join(REPO_ROOT, "reports")
+
 REPORTS = {
-    "Baseline (RGB stats)": "reports/baseline_rf_report.txt",
-    "Spectral (B08/B11/B12 + indices)": "reports/spectral_rf_report.txt",
+    "Baseline (RGB stats)": os.path.join(REPORTS_ROOT, "baseline_rf_report.txt"),
+    "Spectral (B08/B11/B12 + indices)": os.path.join(REPORTS_ROOT, "spectral_rf_report.txt"),
+    "Spectral CNN (13 bands)": os.path.join(REPORTS_ROOT, "spectral_cnn_report.txt"),
 }
 
 
@@ -35,7 +39,7 @@ def main():
         results[name] = parse_summary(path)
 
     if len(results) < 2:
-        print("\nNeed both reports present to compare.")
+        print("\nNeed at least two reports present to compare.")
         return
 
     header = f"{'Model':38s}{'Accuracy':>10s}{'Macro F1':>10s}{'Weighted F1':>13s}"
@@ -43,8 +47,10 @@ def main():
     for name, m in results.items():
         lines.append(f"{name:38s}{m['accuracy']:>10.3f}{m['macro_f1']:>10.3f}{m['weighted_f1']:>13.3f}")
 
-    (n1, m1), (n2, m2) = results.items()
-    winner = n1 if m1["weighted_f1"] >= m2["weighted_f1"] else n2
+    winner = max(
+        results,
+        key=lambda name: results[name]["weighted_f1"] if results[name]["weighted_f1"] is not None else -1,
+    )
     lines.append(f"\nBest model by weighted F1: {winner}")
 
     output = "\n".join(lines)

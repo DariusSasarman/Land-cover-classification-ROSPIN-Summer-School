@@ -10,3 +10,4 @@ rasterio
 huggingface_hub
 oauthlib
 requests-oauthlib
+protobuf
