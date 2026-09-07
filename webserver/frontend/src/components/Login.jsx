@@ -32,7 +32,7 @@ export default function Login() {
   return (
     <section className="login">
       <h2>{mode === 'signin' ? 'Sign in' : 'Create account'}</h2>
-
+      <h3> Once you're logged in, your AOI's will be available to you.</h3>
       <form className="form" onSubmit={handleSubmit}>
         {mode === 'signup' && (
           <>

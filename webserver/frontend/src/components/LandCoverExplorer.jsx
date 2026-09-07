@@ -70,7 +70,7 @@ function AreaViewer({ area, history, onSelectionChange }) {
   }
 
   const mediaSrc = layer === 'rgb' ? classification?.RGB_IMAGE : classification?.Masked_IMAGE
-  const periodLabel = classification?.['period desc'] ?? 'Loading archive'
+  const periodLabel = classification?.period_desc ?? 'Loading archive'
   const topClass = getTopClass(snapshot)
   const topClassMeta = topClass ? EUROSAT_CLASS_BY_ID[topClass[0]] : null
 
@@ -222,7 +222,7 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
 
         <aside className="demo-viewer__sidebar">
           <div className="demo-viewer__insights">
-            <div className="demo-viewer__legend-title">API insights</div>
+            <div className="demo-viewer__legend-title">Generated insights</div>
             <p className="demo-viewer__insight-summary">{currentResponse.title}</p>
             <ul className="demo-viewer__insight-list">
               {currentResponse.insights.map((insight) => (
@@ -233,7 +233,7 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
               <span>History items {history.length}</span>
               {currentClassification ? (
                 <span>
-                  Frame {currentClassification.index} · {currentClassification['period desc']}
+                  Frame {currentClassification.index} · {currentClassification.period_desc}
                 </span>
               ) : null}
             </div>
