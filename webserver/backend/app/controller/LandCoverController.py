@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Header, BackgroundTasks
 from app.service.DemoService import get_demo_areas
 from app.service.AOIService import create_user_AOI, get_user_AOI_list
 from app.model.execution.request.AOIRequest import AOIRequest
@@ -10,8 +10,18 @@ def list_aois(authorization: str = Header(...)):
     return get_user_AOI_list(authorization.removeprefix("Bearer "))
 
 @router.post("/createaoi")
-def create_aoi(payload: AOIRequest, authorization: str = Header(...)):
-    return create_user_AOI(authorization.removeprefix("Bearer "), payload)
+def create_aoi(
+    payload: AOIRequest,
+    background_tasks: BackgroundTasks,
+    authorization: str = Header(...)
+):
+    background_tasks.add_task(
+        create_user_AOI,
+        authorization.removeprefix("Bearer "),
+        payload
+    )
+
+    return {"status": "ok"}
 
 @router.get("/demo")
 def list_demo_areas():
