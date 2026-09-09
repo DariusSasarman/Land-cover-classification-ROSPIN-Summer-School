@@ -17,3 +17,6 @@ JWT_EXPIRES_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "1440"))
 
 COPERNICUS_CLIENT_ID = _require_env("COPERNICUS_CLIENT_ID")
 COPERNICUS_CLIENT_SECRET = _require_env("COPERNICUS_CLIENT_SECRET")
+
+DEFAULT_DB_PATH = os.path.join(os.path.dirname(__file__), "storage", "landcover.db")
+DATABASE_PATH = os.getenv("DATABASE_PATH", DEFAULT_DB_PATH)

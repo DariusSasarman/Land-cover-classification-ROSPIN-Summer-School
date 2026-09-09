@@ -5,6 +5,7 @@ import { submitAoiRequest } from '../utils/requestApi.js'
 import { useAuth } from '../context/AuthContext.jsx'
 
 const STORAGE_KEY = 'landobservator_aoi_draft'
+const SENTINEL_2_MIN_DATE = '2015-06-23'
 
 const INITIAL = {
   region: '',
@@ -18,9 +19,20 @@ function loadDraft() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY)
     if (!raw) return { form: INITIAL, selection: null }
+
     const parsed = JSON.parse(raw)
+    const form = { ...INITIAL, ...parsed.form }
+
+    if (form.startDate && form.startDate < SENTINEL_2_MIN_DATE) {
+      form.startDate = ''
+    }
+
+    if (form.endDate && form.endDate < SENTINEL_2_MIN_DATE) {
+      form.endDate = ''
+    }
+
     return {
-      form: { ...INITIAL, ...parsed.form },
+      form,
       selection: parsed.selection ?? null,
     }
   } catch {
@@ -116,6 +128,7 @@ export default function RequestForm({ setActiveTab }) {
 
   function handleChange(e) {
     const { name, value } = e.target
+
     setForm((prev) => {
       const next = { ...prev, [name]: value }
       formRef.current = next
@@ -173,6 +186,7 @@ export default function RequestForm({ setActiveTab }) {
     const maxGX = nextSelection.tile_grid_range.gx[1]
     const minGY = nextSelection.tile_grid_range.gy[0]
     const maxGY = nextSelection.tile_grid_range.gy[1]
+
     const sw = [nextSelection.bbox_lonlat.south, nextSelection.bbox_lonlat.west]
     const ne = [nextSelection.bbox_lonlat.north, nextSelection.bbox_lonlat.east]
 
@@ -188,6 +202,7 @@ export default function RequestForm({ setActiveTab }) {
           const bounds = cellBoundsFromIndex(gx, gy)
           const cellSw = mercToLonLat(bounds.minX, bounds.minY)
           const cellNe = mercToLonLat(bounds.maxX, bounds.maxY)
+
           L.rectangle(
             [[cellSw[1], cellSw[0]], [cellNe[1], cellNe[0]]],
             {
@@ -213,6 +228,21 @@ export default function RequestForm({ setActiveTab }) {
       return
     }
 
+    if (form.startDate && form.startDate < SENTINEL_2_MIN_DATE) {
+      setSubmitError('The starting date cannot be before June 23, 2015.')
+      return
+    }
+
+    if (form.endDate && form.endDate < SENTINEL_2_MIN_DATE) {
+      setSubmitError('The end date cannot be before June 23, 2015.')
+      return
+    }
+
+    if (form.startDate && form.endDate && form.endDate < form.startDate) {
+      setSubmitError('The end date cannot be earlier than the starting date.')
+      return
+    }
+
     if (!isAuthenticated) {
       saveDraft(formRef.current, selection)
       setActiveTab('login')
@@ -227,7 +257,11 @@ export default function RequestForm({ setActiveTab }) {
       clearDraft()
       setSubmitted(true)
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Unable to submit the request.')
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : 'Unable to submit the request.',
+      )
     } finally {
       setSubmitting(false)
     }
@@ -271,11 +305,13 @@ export default function RequestForm({ setActiveTab }) {
     if (selection) {
       const sw = [selection.bbox_lonlat.south, selection.bbox_lonlat.west]
       const ne = [selection.bbox_lonlat.north, selection.bbox_lonlat.east]
+
       rectLayerRef.current = L.rectangle([sw, ne], {
         color: '#ff6b35',
         weight: 2,
         fillOpacity: 0.12,
       }).addTo(map)
+
       map.fitBounds([sw, ne], { maxZoom: 15 })
     }
 
@@ -286,7 +322,12 @@ export default function RequestForm({ setActiveTab }) {
 
     function drawSelectionFromEvent(startGrid, currentLatLng) {
       const currentGrid = snappedGridFromLatLng(currentLatLng)
-      updateSelection(startGrid[0], startGrid[1], currentGrid[0], currentGrid[1])
+      updateSelection(
+        startGrid[0],
+        startGrid[1],
+        currentGrid[0],
+        currentGrid[1],
+      )
     }
 
     map.on('mousedown', (event) => {
@@ -298,7 +339,11 @@ export default function RequestForm({ setActiveTab }) {
         active: true,
         startGrid: snappedGridFromLatLng(event.latlng),
       }
-      drawSelectionFromEvent(dragStateRef.current.startGrid, event.latlng)
+
+      drawSelectionFromEvent(
+        dragStateRef.current.startGrid,
+        event.latlng,
+      )
     })
 
     map.on('mousemove', (event) => {
@@ -310,7 +355,10 @@ export default function RequestForm({ setActiveTab }) {
         return
       }
 
-      drawSelectionFromEvent(dragStateRef.current.startGrid, event.latlng)
+      drawSelectionFromEvent(
+        dragStateRef.current.startGrid,
+        event.latlng,
+      )
     })
 
     map.on('mouseup', (event) => {
@@ -322,8 +370,15 @@ export default function RequestForm({ setActiveTab }) {
         return
       }
 
-      drawSelectionFromEvent(dragStateRef.current.startGrid, event.latlng)
-      dragStateRef.current = { active: false, startGrid: null }
+      drawSelectionFromEvent(
+        dragStateRef.current.startGrid,
+        event.latlng,
+      )
+
+      dragStateRef.current = {
+        active: false,
+        startGrid: null,
+      }
     })
 
     return () => {
@@ -342,6 +397,7 @@ export default function RequestForm({ setActiveTab }) {
     drawModeRef.current = drawMode
 
     const map = mapRef.current
+
     if (drawMode) {
       map.dragging.disable()
     } else {
@@ -357,8 +413,9 @@ export default function RequestForm({ setActiveTab }) {
         <div className="request-form__success">
           <h2>Request received</h2>
           <p>
-            Thanks, {user?.name || 'there'}. Your personal area-of-interest request
-            has been queued. You'll receive an email with a quote and further instructions once the request has been processed.
+            Thanks, {user?.name || 'there'}. Your personal area-of-interest
+            request has been queued. You'll receive an email with a quote and
+            further instructions once the request has been processed.
           </p>
 
           <button
@@ -392,28 +449,50 @@ export default function RequestForm({ setActiveTab }) {
         alignItems: 'start',
       }}
     >
-      <div className="request-form__intro" style={{ gridColumn: '1 / -1' }}>
-        <h2 style={{ marginLeft: '1rem' }}>Request a personal AOI (area of interest)</h2>
-        <p className="request-form__intro-text" style={{ marginLeft: '1rem' }}>
-          Require a personal land cover analysis for your area of interest? Fill out the form below to submit a request. We&apos;ll get back to you as soon as possible.
+      <div
+        className="request-form__intro"
+        style={{ gridColumn: '1 / -1' }}
+      >
+        <h2 style={{ marginLeft: '1rem' }}>
+          Request a personal AOI (area of interest)
+        </h2>
+
+        <p
+          className="request-form__intro-text"
+          style={{ marginLeft: '1rem' }}
+        >
+          Require a personal land cover analysis for your area of interest?
+          Fill out the form below to submit a request. We&apos;ll get back to
+          you as soon as possible.
         </p>
+
         {!isAuthenticated && (
-          <p className="request-form__intro-text" style={{ marginLeft: '1rem' }}>
-            You'll need an account to submit — we'll ask you to sign in once you hit submit, and your progress here will be saved.
+          <p
+            className="request-form__intro-text"
+            style={{ marginLeft: '1rem' }}
+          >
+            You'll need an account to submit — we'll ask you to sign in once
+            you hit submit, and your progress here will be saved.
           </p>
         )}
       </div>
 
-      <div className="form__map-picker form__map-picker--standalone" style={{ gridColumn: 1 }}>
+      <div
+        className="form__map-picker form__map-picker--standalone"
+        style={{ gridColumn: 1 }}
+      >
         <div className="form__map-shell">
           <div className="form__map-toolbar">
             <button
               type="button"
-              className={`btn btn--secondary form__toggle ${drawMode ? 'is-active' : ''}`}
+              className={`btn btn--secondary form__toggle ${
+                drawMode ? 'is-active' : ''
+              }`}
               onClick={() => setDrawMode((prev) => !prev)}
             >
               {drawMode ? 'Selection on' : 'Select area'}
             </button>
+
             <button
               type="button"
               className="btn btn--secondary form__toggle"
@@ -424,7 +503,8 @@ export default function RequestForm({ setActiveTab }) {
           </div>
 
           <div className="form__map-hint">
-            Click <strong>Select area</strong>, then drag corner-to-corner on the map to snap your target area to the Sentinel-2 tile grid.
+            Click <strong>Select area</strong>, then drag corner-to-corner on
+            the map to snap your target area to the Sentinel-2 tile grid.
           </div>
 
           <div
@@ -442,24 +522,32 @@ export default function RequestForm({ setActiveTab }) {
       >
         <div className="form__row form__row--full">
           <label>Chosen land surface</label>
+
           <div className="form__selection-field">
             {selection ? (
               <dl>
                 <div>
-                  <dt>Tile count : {selection.tile_count.total} total </dt>
+                  <dt>Tile count : {selection.tile_count.total} total</dt>
                 </div>
+
                 <div>
-                  <dt>Grid range :
-                    gx ∈ {'['}{selection.tile_grid_range.gx[0]},{selection.tile_grid_range.gx[1]}{']'} and gy ∈ {'['}{selection.tile_grid_range.gy[0]},{selection.tile_grid_range.gy[1]}{']'}
+                  <dt>
+                    Grid range : gx ∈ [
+                    {selection.tile_grid_range.gx[0]},
+                    {selection.tile_grid_range.gx[1]}] and gy ∈ [
+                    {selection.tile_grid_range.gy[0]},
+                    {selection.tile_grid_range.gy[1]}]
                   </dt>
                 </div>
+
                 <div>
                   <dt>Area : {selection.area_km2} km²</dt>
                 </div>
               </dl>
             ) : (
               <p>
-                No selection yet. Choose a target area to generate the tile grid and bounding box.
+                No selection yet. Choose a target area to generate the tile
+                grid and bounding box.
               </p>
             )}
           </div>
@@ -474,6 +562,7 @@ export default function RequestForm({ setActiveTab }) {
 
         <div className="form__row form__row--full">
           <label htmlFor="frequency">Monitoring frequency</label>
+
           <select
             id="frequency"
             name="frequency"
@@ -487,22 +576,26 @@ export default function RequestForm({ setActiveTab }) {
         </div>
 
         <div className="form__row">
-          <label>Starting date</label>
+          <label htmlFor="startDate">Starting date</label>
+
           <input
             id="startDate"
             name="startDate"
             type="date"
+            min={SENTINEL_2_MIN_DATE}
             value={form.startDate}
             onChange={handleChange}
           />
         </div>
 
         <div className="form__row">
-          <label>End date</label>
+          <label htmlFor="endDate">End date</label>
+
           <input
             id="endDate"
             name="endDate"
             type="date"
+            min={SENTINEL_2_MIN_DATE}
             value={form.endDate}
             onChange={handleChange}
           />
@@ -510,6 +603,7 @@ export default function RequestForm({ setActiveTab }) {
 
         <div className="form__row form__row--full">
           <label htmlFor="region">Region of interest</label>
+
           <input
             id="region"
             name="region"
@@ -522,6 +616,7 @@ export default function RequestForm({ setActiveTab }) {
 
         <div className="form__row form__row--full">
           <label htmlFor="notes">Additional notes (optional)</label>
+
           <textarea
             id="notes"
             name="notes"
@@ -532,10 +627,21 @@ export default function RequestForm({ setActiveTab }) {
           />
         </div>
 
-        <button type="submit" className="btn btn--primary" disabled={submitting}>
-          {submitting ? 'Submitting...' : isAuthenticated ? 'Submit request' : 'Continue to sign in'}
+        <button
+          type="submit"
+          className="btn btn--primary"
+          disabled={submitting}
+        >
+          {submitting
+            ? 'Submitting...'
+            : isAuthenticated
+              ? 'Submit request'
+              : 'Continue to sign in'}
         </button>
-        {submitError && <p className="form__error">{submitError}</p>}
+
+        {submitError && (
+          <p className="form__error">{submitError}</p>
+        )}
       </form>
     </section>
   )
