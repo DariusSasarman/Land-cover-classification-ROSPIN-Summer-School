@@ -4,6 +4,9 @@ import numpy as np
 from PIL import Image
 
 from app.ml_engine.EurosatColors import EUROSAT_COLORS
+from app.logger import get_logger
+
+logger = get_logger("imagery.MaskBuilder")
 
 
 def _hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
@@ -18,6 +21,7 @@ def build_mask_image(
 ) -> Image.Image:
     rows = len(predicted_grid)
     cols = len(predicted_grid[0]) if rows else 0
+    logger.debug("Building Eurosat color mask overlay for %dx%d grid with alpha=%d", rows, cols, alpha)
 
     mask = Image.new("RGBA", rgb_image.size, (0, 0, 0, 0))
 

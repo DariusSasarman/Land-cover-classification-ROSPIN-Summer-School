@@ -1,18 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LandCoverExplorer from './LandCoverExplorer.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { fetchAoiList } from '../utils/requestApi.js'
+
+const POLL_INTERVAL_MS = 4000
 
 export default function DisplayListAOI() {
   const { token, logout } = useAuth()
   const [responses, setResponses] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const pollRef = useRef(null)
 
+  const hasInProgress = responses.some((r) => r.status === 'in_progress')
+
+  async function loadAoiResponses(isInitial = false) {
+    try {
+      const data = await fetchAoiList(token)
+      setResponses(data)
+      if (isInitial) setLoading(false)
+    } catch (err) {
+      setError(err.message)
+      if (isInitial) setLoading(false)
+    }
+  }
+
+  // Initial load
   useEffect(() => {
     let active = true
 
-    async function loadAoiResponses() {
+    async function init() {
       try {
         const data = await fetchAoiList(token)
         if (!active) return
@@ -24,12 +41,36 @@ export default function DisplayListAOI() {
       }
     }
 
-    loadAoiResponses()
+    init()
 
     return () => {
       active = false
     }
   }, [token])
+
+  // Polling while any response is in_progress
+  useEffect(() => {
+    if (!hasInProgress) {
+      if (pollRef.current) {
+        clearInterval(pollRef.current)
+        pollRef.current = null
+      }
+      return
+    }
+
+    if (pollRef.current) return // already polling
+
+    pollRef.current = setInterval(() => {
+      loadAoiResponses(false)
+    }, POLL_INTERVAL_MS)
+
+    return () => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current)
+        pollRef.current = null
+      }
+    }
+  }, [hasInProgress, token])
 
   return (
     <section className="demo-explorer" id="my-aois">

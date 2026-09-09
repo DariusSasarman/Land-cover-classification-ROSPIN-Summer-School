@@ -178,12 +178,19 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
     return []
   }, [responses, response, propArea])
 
-  const [selectedId, setSelectedId] = useState(() => responseList[0]?.id)
+  // Split into done vs in-progress
+  const doneResponses = useMemo(
+    () => responseList.filter((r) => !r.status || r.status === 'done'),
+    [responseList],
+  )
+  const hasInProgress = responseList.some((r) => r.status === 'in_progress')
 
-  const activeId = responseList.some((r) => r.id === selectedId) ? selectedId : responseList[0]?.id
+  const [selectedId, setSelectedId] = useState(() => doneResponses[0]?.id)
+
+  const activeId = doneResponses.some((r) => r.id === selectedId) ? selectedId : doneResponses[0]?.id
   const currentResponse = useMemo(() => {
-    return responseList.find((r) => r.id === activeId) ?? responseList[0] ?? null
-  }, [responseList, activeId])
+    return doneResponses.find((r) => r.id === activeId) ?? doneResponses[0] ?? null
+  }, [doneResponses, activeId])
 
   const area = useMemo(() => {
     if (!currentResponse) {
@@ -211,65 +218,113 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
     }))
   }, [])
 
-  if (!currentResponse) {
-    return <p className="demo-viewer__insight-secondary">Loading insights...</p>
-  }
+  const showBottomList = responseList.length > 1
 
   return (
     <div className="demo-explorer__layout">
       <div className="demo-detail">
-        <AreaViewer key={`${area.id}-${history.length}`} area={area} history={history} onSelectionChange={setViewerSelection} />
-
-        <aside className="demo-viewer__sidebar">
-          <div className="demo-viewer__insights">
-            <div className="demo-viewer__legend-title">Generated insights</div>
-            <p className="demo-viewer__insight-summary">{currentResponse.title}</p>
-            <ul className="demo-viewer__insight-list">
-              {currentResponse.insights.map((insight) => (
-                <li key={insight} className="demo-viewer__insight-secondary">{insight}</li>
-              ))}
-            </ul>
-            <div className="demo-viewer__insight-meta">
-              <span>History items {history.length}</span>
-              {currentClassification ? (
-                <span>
-                  Frame {currentClassification.index} · {currentClassification.period_desc}
-                </span>
-              ) : null}
+        {currentResponse ? (
+          <AreaViewer
+            key={`${area.id}-${history.length}`}
+            area={area}
+            history={history}
+            onSelectionChange={setViewerSelection}
+          />
+        ) : (
+          <div className="demo-viewer">
+            <div className="demo-viewer__stage">
+              <div className="demo-viewer__media">
+                <div className="demo-viewer__canvas">
+                  <div className="demo-viewer__empty demo-viewer__empty--wip">
+                    <span className="wip-spinner" aria-hidden="true" />
+                    <span>Your request is being processed…</span>
+                  </div>
+                </div>
+              </div>
             </div>
+            <aside className="demo-viewer__sidebar">
+              <div className="demo-viewer__header">
+                <h3 className="demo-viewer__eyebrow">Work in progress</h3>
+              </div>
+              <p className="demo-viewer__insight-secondary">
+                Your AOI is currently being analysed. Results will appear here once the pipeline finishes.
+              </p>
+            </aside>
           </div>
+        )}
 
-          <div className="demo-detail__charts">
-            <div className="demo-graph-picker">
-              <div className="demo-graph-picker__label">Pick a time graph</div>
-              <div className="demo-graph-picker__buttons">
-                {graphChoices.map((choice) => (
-                  <button
-                    key={choice.id}
-                    type="button"
-                    className={selectedGraphId === choice.id ? 'demo-graph-picker__button demo-graph-picker__button--active' : 'demo-graph-picker__button'}
-                    onClick={() => setSelectedGraphId(choice.id)}
-                  >
-                    {choice.label}
-                  </button>
+        {currentResponse && (
+          <aside className="demo-viewer__sidebar">
+            <div className="demo-viewer__insights">
+              <div className="demo-viewer__legend-title">Generated insights</div>
+              <p className="demo-viewer__insight-summary">{currentResponse.title}</p>
+              <ul className="demo-viewer__insight-list">
+                {currentResponse.insights.map((insight) => (
+                  <li key={insight} className="demo-viewer__insight-secondary">{insight}</li>
                 ))}
+              </ul>
+              <div className="demo-viewer__insight-meta">
+                <span>History items {history.length}</span>
+                {currentClassification ? (
+                  <span>
+                    Frame {currentClassification.index} · {currentClassification.period_desc}
+                  </span>
+                ) : null}
               </div>
             </div>
 
-            <TimeSeriesChart history={history} classId={selectedGraphId} />
-          </div>
-        </aside>
+            <div className="demo-detail__charts">
+              <div className="demo-graph-picker">
+                <div className="demo-graph-picker__label">Pick a time graph</div>
+                <div className="demo-graph-picker__buttons">
+                  {graphChoices.map((choice) => (
+                    <button
+                      key={choice.id}
+                      type="button"
+                      className={selectedGraphId === choice.id ? 'demo-graph-picker__button demo-graph-picker__button--active' : 'demo-graph-picker__button'}
+                      onClick={() => setSelectedGraphId(choice.id)}
+                    >
+                      {choice.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <TimeSeriesChart history={history} classId={selectedGraphId} />
+            </div>
+          </aside>
+        )}
       </div>
 
-      {responseList.length > 1 && (
-        <aside className="demo-list demo-list--stacked demo-list--bottom" aria-label="Demo areas">
+      {showBottomList && (
+        <aside className="demo-list demo-list--stacked demo-list--bottom" aria-label="AOI areas">
           {responseList.map((item) => {
+            const isDone = !item.status || item.status === 'done'
             const itemHistory = item.History ?? []
             const itemLatest = itemHistory[itemHistory.length - 1]
             const itemSnapshot = getClassificationSnapshot(itemLatest)
             const itemTop = getTopClass(itemSnapshot)
-            const dominant = itemTop ? EUROSAT_CLASS_BY_ID[itemTop[0]] : null
+            const dominant = isDone && itemTop ? EUROSAT_CLASS_BY_ID[itemTop[0]] : null
             const name = formatAreaName(item.id)
+
+            if (!isDone) {
+              // Non-clickable work-in-progress card
+              return (
+                <div
+                  key={item.id}
+                  className="demo-card demo-card--wip"
+                  aria-label={`${name} — work in progress`}
+                  title="This area is still being processed"
+                >
+                  <span className="demo-card__name">{name}</span>
+                  <span className="demo-card__region">{item.title}</span>
+                  <span className="demo-card__tag demo-card__tag--wip">
+                    <span className="wip-dot" aria-hidden="true" />
+                    Work in progress
+                  </span>
+                </div>
+              )
+            }
 
             return (
               <button

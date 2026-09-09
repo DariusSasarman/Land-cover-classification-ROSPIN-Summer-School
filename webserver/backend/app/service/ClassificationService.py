@@ -10,6 +10,9 @@ from app.imagery.MaskBuilder import build_mask_image
 from app.ml_engine.LandCoverClassifier import LandCoverClassifier
 from app.satellite.CopernicusClient import CopernicusClient
 from app.storage.ImageStore import save_period_images
+from app.logger import get_logger
+
+logger = get_logger("service.ClassificationService")
 
 
 def classify_area(
@@ -22,14 +25,26 @@ def classify_area(
     time_to: str,
 ) -> Classification:
     tile_px = area.tile_px
+    width_px = area.tile_count.x * tile_px
+    height_px = area.tile_count.y * tile_px
+
+    logger.info(
+        "Classifying area '%s' (period '%s'): requesting GeoTIFF %dx%d (%d tiles x %d tiles)...",
+        area_id,
+        period_id,
+        width_px,
+        height_px,
+        area.tile_count.x,
+        area.tile_count.y,
+    )
 
     tiff_bytes = CopernicusClient.get_instance().fetch_geotiff(
         west=area.bbox_lonlat.west,
         south=area.bbox_lonlat.south,
         east=area.bbox_lonlat.east,
         north=area.bbox_lonlat.north,
-        width=area.tile_count.x * tile_px,
-        height=area.tile_count.y * tile_px,
+        width=width_px,
+        height=height_px,
         time_from=time_from,
         time_to=time_to,
     )
@@ -41,6 +56,7 @@ def classify_area(
     predicted_grid: List[List[str]] = []
     predictions: List[str] = []
 
+    logger.info("Running ML inference over %d grid tiles...", area.tile_count.x * area.tile_count.y)
     for row in tiles:
         predicted_row = []
         for tile in row:
@@ -55,11 +71,12 @@ def classify_area(
         class_id: round((count / total) * 100, 1)
         for class_id, count in Counter(predictions).items()
     }
+    logger.info("Class distribution for area '%s' (period '%s'): %s", area_id, period_id, area_percentages)
 
     rgb_image = Image.fromarray(rgb)
 
     rgb_url, mask_url = save_period_images(
-        area_id, period_id, rgb_image, build_mask_image(predicted_grid,rgb_image, tile_px)
+        area_id, period_id, rgb_image, build_mask_image(predicted_grid, rgb_image, tile_px)
     )
 
     return Classification(

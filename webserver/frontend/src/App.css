@@ -275,6 +275,66 @@ main {
   font-weight: 600;
 }
 
+/* Work-in-progress card variant */
+.demo-card--wip {
+  cursor: default;
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.demo-card--wip:hover {
+  border-color: var(--border);
+  background: var(--bg-card);
+}
+
+.demo-card__tag--wip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Pulsing dot in the WIP card tag */
+.wip-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: wip-pulse 1.4s ease-in-out infinite;
+}
+
+/* Pulsing spinner in the WIP viewer panel */
+.demo-viewer__empty--wip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.wip-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: wip-spin 1s linear infinite;
+}
+
+@keyframes wip-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.75); }
+}
+
+@keyframes wip-spin {
+  to { transform: rotate(360deg); }
+}
+
+
 .demo-detail {
   border: 1px solid var(--border);
   border-radius: 16px;

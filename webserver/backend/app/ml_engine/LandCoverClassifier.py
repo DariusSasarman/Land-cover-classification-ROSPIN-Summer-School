@@ -6,6 +6,9 @@ from torchvision.models import ResNet18_Weights
 
 from app.ml_engine.ResNet18M3 import ResNet18_M3
 from app.ml_engine.EurosatClasses import EUROSAT_CLASS_ORDER
+from app.logger import get_logger
+
+logger = get_logger("ml_engine.LandCoverClassifier")
 
 _TRANSFORM = ResNet18_Weights.DEFAULT.transforms()
 
@@ -14,8 +17,10 @@ class LandCoverClassifier:
     _instance = None
 
     def __init__(self):
+        logger.info("Initializing LandCoverClassifier singleton...")
         self._model = ResNet18_M3.get_instance()
         self._device = next(self._model.parameters()).device
+        logger.info("LandCoverClassifier loaded on target device: %s", self._device)
 
     @classmethod
     def get_instance(cls) -> "LandCoverClassifier":
