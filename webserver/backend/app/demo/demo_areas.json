@@ -1,0 +1,717 @@
+[
+  {
+    "id": "cluj-napoca-romania",
+    "title": "Cluj-Napoca, Romania",
+    "status": "done",
+    "insights": [
+      "Cluj-Napoca, Romania shows Industrial as the dominant land cover at 65.3%.",
+      "Vegetation sits at 13.5% while water reaches 2.2% in the latest acquisition.",
+      "Industrial has remained the dominant class throughout the observed period."
+    ],
+    "History": [
+      {
+        "Classification": {
+          "index": "01",
+          "period_desc": "2017",
+          "Percentages": {
+            "AnnualCrop": "10.1%",
+            "HerbaceousVegetation": "6.1%",
+            "PermanentCrop": "15.6%",
+            "Industrial": "53.7%",
+            "Pasture": "1.3%",
+            "Forest": "10.3%",
+            "SeaLake": "1.3%",
+            "Highway": "0.3%",
+            "Residential": "1.1%",
+            "River": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2017-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2017-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "02",
+          "period_desc": "2018",
+          "Percentages": {
+            "AnnualCrop": "13.0%",
+            "Forest": "13.8%",
+            "Industrial": "54.0%",
+            "HerbaceousVegetation": "4.2%",
+            "PermanentCrop": "11.9%",
+            "SeaLake": "0.8%",
+            "Highway": "0.3%",
+            "Pasture": "0.8%",
+            "Residential": "0.8%",
+            "River": "0.5%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2018-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2018-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "03",
+          "period_desc": "2019",
+          "Percentages": {
+            "AnnualCrop": "9.0%",
+            "Pasture": "2.4%",
+            "HerbaceousVegetation": "4.0%",
+            "Industrial": "59.0%",
+            "PermanentCrop": "9.8%",
+            "Forest": "11.6%",
+            "SeaLake": "2.6%",
+            "Highway": "0.5%",
+            "Residential": "0.8%",
+            "River": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2019-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2019-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "04",
+          "period_desc": "2020",
+          "Percentages": {
+            "AnnualCrop": "10.3%",
+            "Pasture": "1.9%",
+            "Forest": "15.6%",
+            "Industrial": "57.7%",
+            "HerbaceousVegetation": "2.4%",
+            "PermanentCrop": "6.9%",
+            "SeaLake": "3.7%",
+            "Residential": "0.8%",
+            "Highway": "0.3%",
+            "River": "0.5%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2020-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2020-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "05",
+          "period_desc": "2021",
+          "Percentages": {
+            "AnnualCrop": "9.8%",
+            "Pasture": "1.9%",
+            "Forest": "21.4%",
+            "Industrial": "56.1%",
+            "HerbaceousVegetation": "1.9%",
+            "PermanentCrop": "6.3%",
+            "SeaLake": "1.1%",
+            "River": "0.8%",
+            "Highway": "0.5%",
+            "Residential": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2021-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2021-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "06",
+          "period_desc": "2022",
+          "Percentages": {
+            "AnnualCrop": "8.7%",
+            "Forest": "16.4%",
+            "Industrial": "61.9%",
+            "PermanentCrop": "6.3%",
+            "HerbaceousVegetation": "2.6%",
+            "Pasture": "1.3%",
+            "SeaLake": "1.1%",
+            "Highway": "0.5%",
+            "Residential": "0.5%",
+            "River": "0.5%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2022-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2022-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "07",
+          "period_desc": "2023",
+          "Percentages": {
+            "AnnualCrop": "8.7%",
+            "Forest": "17.2%",
+            "Industrial": "60.6%",
+            "HerbaceousVegetation": "3.4%",
+            "PermanentCrop": "7.4%",
+            "Pasture": "0.8%",
+            "River": "0.8%",
+            "SeaLake": "0.8%",
+            "Residential": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2023-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2023-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "08",
+          "period_desc": "2024",
+          "Percentages": {
+            "AnnualCrop": "9.8%",
+            "HerbaceousVegetation": "5.3%",
+            "Industrial": "59.8%",
+            "Pasture": "2.1%",
+            "PermanentCrop": "11.1%",
+            "Forest": "10.3%",
+            "River": "0.5%",
+            "Highway": "0.8%",
+            "SeaLake": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2024-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2024-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "09",
+          "period_desc": "2025",
+          "Percentages": {
+            "AnnualCrop": "8.5%",
+            "Pasture": "1.3%",
+            "Industrial": "61.1%",
+            "Forest": "19.6%",
+            "HerbaceousVegetation": "3.2%",
+            "PermanentCrop": "4.2%",
+            "River": "0.3%",
+            "Highway": "0.8%",
+            "SeaLake": "1.1%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2025-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2025-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "10",
+          "period_desc": "2026",
+          "Percentages": {
+            "PermanentCrop": "13.5%",
+            "Pasture": "0.3%",
+            "Industrial": "65.3%",
+            "HerbaceousVegetation": "3.4%",
+            "Forest": "10.1%",
+            "AnnualCrop": "5.3%",
+            "River": "0.3%",
+            "SeaLake": "1.9%"
+          },
+          "RGB_IMAGE": "/demo/images/cluj-napoca-romania/2026-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/cluj-napoca-romania/2026-09-01_mask.png"
+        }
+      }
+    ],
+    "request": {
+      "requester": {
+        "name": "dadu",
+        "email": "dadu@gmail.com",
+        "organization": "dadu",
+        "region": "Cluj-Napoca, Romania"
+      },
+      "monitoring": {
+        "frequency": "annual",
+        "startDate": "2017-09-01",
+        "endDate": "2026-09-01",
+        "notes": ""
+      },
+      "area": {
+        "tile_grid_range": {
+          "gx": [
+            4090,
+            4116
+          ],
+          "gy": [
+            9220,
+            9233
+          ]
+        },
+        "tile_count": {
+          "x": 27,
+          "y": 14,
+          "total": 378
+        },
+        "pixel_size_m": 10,
+        "tile_px": 64,
+        "area_km2": 154.829,
+        "bbox_lonlat": {
+          "west": 23.514300877112593,
+          "south": 46.7465360905889,
+          "east": 23.669529758208444,
+          "north": 46.8016611483046
+        },
+        "bbox_mercator": {
+          "minX": 2617600.0,
+          "minY": 5900800.0,
+          "maxX": 2634880.0,
+          "maxY": 5909760.0
+        }
+      }
+    }
+  },
+  {
+    "id": "constanta-romania",
+    "title": "Constanta, Romania",
+    "status": "done",
+    "insights": [
+      "Constanta, Romania shows SeaLake as the dominant land cover at 56.0%.",
+      "Vegetation sits at 1.5% while water reaches 56.9% in the latest acquisition.",
+      "SeaLake has remained the dominant class throughout the observed period."
+    ],
+    "History": [
+      {
+        "Classification": {
+          "index": "01",
+          "period_desc": "2017",
+          "Percentages": {
+            "AnnualCrop": "10.1%",
+            "Industrial": "23.1%",
+            "HerbaceousVegetation": "1.9%",
+            "SeaLake": "56.4%",
+            "PermanentCrop": "5.0%",
+            "Residential": "2.4%",
+            "River": "0.5%",
+            "Forest": "0.3%",
+            "Highway": "0.4%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2017-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2017-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "02",
+          "period_desc": "2018",
+          "Percentages": {
+            "River": "1.2%",
+            "Industrial": "17.5%",
+            "HerbaceousVegetation": "1.3%",
+            "SeaLake": "55.8%",
+            "PermanentCrop": "9.4%",
+            "AnnualCrop": "9.8%",
+            "Residential": "3.8%",
+            "Forest": "0.4%",
+            "Highway": "0.7%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2018-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2018-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "03",
+          "period_desc": "2019",
+          "Percentages": {
+            "HerbaceousVegetation": "1.9%",
+            "Industrial": "19.8%",
+            "PermanentCrop": "8.9%",
+            "SeaLake": "54.9%",
+            "AnnualCrop": "9.3%",
+            "River": "0.9%",
+            "Forest": "0.5%",
+            "Residential": "3.2%",
+            "Highway": "0.7%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2019-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2019-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "04",
+          "period_desc": "2020",
+          "Percentages": {
+            "River": "1.1%",
+            "Industrial": "21.5%",
+            "HerbaceousVegetation": "1.6%",
+            "SeaLake": "55.8%",
+            "PermanentCrop": "8.1%",
+            "AnnualCrop": "8.9%",
+            "Forest": "0.3%",
+            "Residential": "2.5%",
+            "Highway": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2020-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2020-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "05",
+          "period_desc": "2021",
+          "Percentages": {
+            "Highway": "0.9%",
+            "Industrial": "22.4%",
+            "HerbaceousVegetation": "1.2%",
+            "SeaLake": "56.2%",
+            "PermanentCrop": "6.4%",
+            "AnnualCrop": "8.0%",
+            "River": "0.7%",
+            "Forest": "0.7%",
+            "Residential": "3.6%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2021-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2021-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "06",
+          "period_desc": "2022",
+          "Percentages": {
+            "PermanentCrop": "7.7%",
+            "Industrial": "20.0%",
+            "SeaLake": "54.2%",
+            "Forest": "2.5%",
+            "HerbaceousVegetation": "2.0%",
+            "AnnualCrop": "8.1%",
+            "River": "1.1%",
+            "Residential": "3.8%",
+            "Highway": "0.5%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2022-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2022-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "07",
+          "period_desc": "2023",
+          "Percentages": {
+            "AnnualCrop": "8.8%",
+            "Industrial": "22.4%",
+            "HerbaceousVegetation": "1.7%",
+            "River": "1.2%",
+            "SeaLake": "52.5%",
+            "PermanentCrop": "9.0%",
+            "Forest": "1.9%",
+            "Residential": "2.0%",
+            "Highway": "0.5%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2023-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2023-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "08",
+          "period_desc": "2024",
+          "Percentages": {
+            "Pasture": "0.1%",
+            "Industrial": "21.1%",
+            "SeaLake": "56.2%",
+            "HerbaceousVegetation": "1.6%",
+            "River": "1.2%",
+            "PermanentCrop": "8.0%",
+            "AnnualCrop": "7.6%",
+            "Forest": "0.3%",
+            "Residential": "3.6%",
+            "Highway": "0.4%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2024-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2024-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "09",
+          "period_desc": "2025",
+          "Percentages": {
+            "AnnualCrop": "5.8%",
+            "Industrial": "24.3%",
+            "PermanentCrop": "7.6%",
+            "River": "1.1%",
+            "SeaLake": "56.4%",
+            "HerbaceousVegetation": "1.7%",
+            "Residential": "2.8%",
+            "Forest": "0.1%",
+            "Highway": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2025-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2025-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "10",
+          "period_desc": "2026",
+          "Percentages": {
+            "AnnualCrop": "5.3%",
+            "Industrial": "23.5%",
+            "HerbaceousVegetation": "1.5%",
+            "SeaLake": "56.0%",
+            "River": "0.9%",
+            "PermanentCrop": "9.2%",
+            "Residential": "3.7%"
+          },
+          "RGB_IMAGE": "/demo/images/constanta-romania/2026-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/constanta-romania/2026-09-01_mask.png"
+        }
+      }
+    ],
+    "request": {
+      "requester": {
+        "name": "dadu",
+        "email": "dadu@gmail.com",
+        "organization": "dadu",
+        "region": "Constanta, Romania"
+      },
+      "monitoring": {
+        "frequency": "annual",
+        "startDate": "2017-09-01",
+        "endDate": "2026-09-01",
+        "notes": ""
+      },
+      "area": {
+        "tile_grid_range": {
+          "gx": [
+            4972,
+            4997
+          ],
+          "gy": [
+            8564,
+            8592
+          ]
+        },
+        "tile_count": {
+          "x": 26,
+          "y": 29,
+          "total": 754
+        },
+        "pixel_size_m": 10,
+        "tile_px": 64,
+        "area_km2": 308.838,
+        "bbox_lonlat": {
+          "west": 28.58511099291047,
+          "south": 44.100190450477065,
+          "east": 28.734590656187954,
+          "north": 44.21980009855192
+        },
+        "bbox_mercator": {
+          "minX": 3182080.0,
+          "minY": 5480960.0,
+          "maxX": 3198720.0,
+          "maxY": 5499520.0
+        }
+      }
+    }
+  },
+  {
+    "id": "paradise-california-usa",
+    "title": "Paradise, California, USA",
+    "status": "done",
+    "insights": [
+      "Paradise, California, USA shows PermanentCrop as the dominant land cover at 74.7%.",
+      "Vegetation sits at 23.1% while water reaches 0.1% in the latest acquisition.",
+      "The dominant class shifted from Forest to PermanentCrop across the observed period."
+    ],
+    "History": [
+      {
+        "Classification": {
+          "index": "01",
+          "period_desc": "2017",
+          "Percentages": {
+            "Forest": "52.3%",
+            "HerbaceousVegetation": "3.9%",
+            "Industrial": "9.5%",
+            "AnnualCrop": "0.3%",
+            "PermanentCrop": "34.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2017-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2017-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "02",
+          "period_desc": "2018",
+          "Percentages": {
+            "Forest": "56.9%",
+            "HerbaceousVegetation": "7.7%",
+            "PermanentCrop": "25.6%",
+            "Industrial": "9.0%",
+            "AnnualCrop": "0.4%",
+            "River": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2018-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2018-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "03",
+          "period_desc": "2019",
+          "Percentages": {
+            "Forest": "20.9%",
+            "PermanentCrop": "64.9%",
+            "HerbaceousVegetation": "9.6%",
+            "Industrial": "4.1%",
+            "AnnualCrop": "0.3%",
+            "River": "0.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2019-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2019-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "04",
+          "period_desc": "2020",
+          "Percentages": {
+            "PermanentCrop": "91.4%",
+            "Forest": "1.2%",
+            "AnnualCrop": "4.4%",
+            "HerbaceousVegetation": "3.0%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2020-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2020-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "05",
+          "period_desc": "2021",
+          "Percentages": {
+            "Forest": "17.9%",
+            "PermanentCrop": "70.7%",
+            "HerbaceousVegetation": "7.6%",
+            "Industrial": "3.4%",
+            "AnnualCrop": "0.4%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2021-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2021-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "06",
+          "period_desc": "2022",
+          "Percentages": {
+            "Forest": "18.7%",
+            "HerbaceousVegetation": "14.2%",
+            "PermanentCrop": "63.4%",
+            "Industrial": "3.1%",
+            "AnnualCrop": "0.4%",
+            "River": "0.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2022-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2022-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "07",
+          "period_desc": "2023",
+          "Percentages": {
+            "Forest": "28.9%",
+            "HerbaceousVegetation": "8.4%",
+            "PermanentCrop": "55.1%",
+            "Industrial": "6.4%",
+            "AnnualCrop": "0.7%",
+            "Pasture": "0.1%",
+            "River": "0.3%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2023-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2023-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "08",
+          "period_desc": "2024",
+          "Percentages": {
+            "Forest": "23.9%",
+            "HerbaceousVegetation": "6.1%",
+            "PermanentCrop": "65.9%",
+            "Industrial": "3.7%",
+            "AnnualCrop": "0.3%",
+            "River": "0.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2024-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2024-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "09",
+          "period_desc": "2025",
+          "Percentages": {
+            "Forest": "21.8%",
+            "HerbaceousVegetation": "5.9%",
+            "PermanentCrop": "67.9%",
+            "Industrial": "3.9%",
+            "AnnualCrop": "0.4%",
+            "River": "0.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2025-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2025-09-01_mask.png"
+        }
+      },
+      {
+        "Classification": {
+          "index": "10",
+          "period_desc": "2026",
+          "Percentages": {
+            "Forest": "15.1%",
+            "PermanentCrop": "74.7%",
+            "HerbaceousVegetation": "8.0%",
+            "Industrial": "1.5%",
+            "AnnualCrop": "0.6%",
+            "River": "0.1%"
+          },
+          "RGB_IMAGE": "/demo/images/paradise-california-usa/2026-09-01_rgb.png",
+          "Masked_IMAGE": "/demo/images/paradise-california-usa/2026-09-01_mask.png"
+        }
+      }
+    ],
+    "request": {
+      "requester": {
+        "name": "dadu",
+        "email": "dadu@gmail.com",
+        "organization": "dadu",
+        "region": "Paradise, California, USA"
+      },
+      "monitoring": {
+        "frequency": "annual",
+        "startDate": "2017-09-01",
+        "endDate": "2026-09-01",
+        "notes": ""
+      },
+      "area": {
+        "tile_grid_range": {
+          "gx": [
+            -21167,
+            -21141
+          ],
+          "gy": [
+            7537,
+            7561
+          ]
+        },
+        "tile_count": {
+          "x": 27,
+          "y": 25,
+          "total": 675
+        },
+        "pixel_size_m": 10,
+        "tile_px": 64,
+        "area_km2": 276.48,
+        "bbox_lonlat": {
+          "west": -121.69369356133062,
+          "south": 39.70855339465656,
+          "east": -121.53846468023477,
+          "north": 39.819037200921414
+        },
+        "bbox_mercator": {
+          "minX": -13546880.0,
+          "minY": 4823680.0,
+          "maxX": -13529600.0,
+          "maxY": 4839680.0
+        }
+      }
+    }
+  }
+]

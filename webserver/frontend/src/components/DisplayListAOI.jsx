@@ -77,9 +77,6 @@ export default function DisplayListAOI() {
       <div className="section-header">
         <h2>My areas of interest</h2>
         <p>Your requested AOIs and their land-cover history.</p>
-        <button type="button" className="btn btn--secondary" onClick={logout}>
-          Sign out
-        </button>
       </div>
 
       {loading ? (
@@ -93,6 +90,10 @@ export default function DisplayListAOI() {
       ) : (
         <LandCoverExplorer responses={responses} />
       )}
+
+      <button type="button" className="btn btn--secondary" style={{ marginTop: '2rem' }} onClick={logout}>
+          Sign out
+        </button>
     </section>
   )
 }
