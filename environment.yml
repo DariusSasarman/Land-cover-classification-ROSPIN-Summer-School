@@ -1,0 +1,21 @@
+name: eurosat-resnet
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::pytorch-cuda=12.4
+  - numpy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - graphviz
+  - ipykernel
+  - jupyter
+  - tqdm
+  - requests
+  - pandas
+  - pip

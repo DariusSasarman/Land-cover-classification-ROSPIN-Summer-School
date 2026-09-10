@@ -4,6 +4,26 @@ Project developed during [Rospin Summer School](https://github.com/Romanian-Spac
 
 This project targets the task of *Land use land cover classification task* using machine learning.
 
+### Fine-tune the local 13-band `.pth` model
+
+The checkpoint `notebooks/resnet18_sentinel2_all_moco.pth` contains the
+pretrained 13-band ResNet-18 backbone. Fine-tune it on labeled multispectral
+GeoTIFFs with:
+
+```bash
+python ./src/train_spectral_resnet_torchgeo.py `
+  --weights ./notebooks/resnet18_sentinel2_all_moco.pth
+```
+
+The current loader expects one directory per EuroSAT class under
+`data/raw/EuroSATallBands`, with 13 bands in Sentinel-2 order and reflectance
+values scaled by 10000. It creates a new 10-class head and saves the best
+fine-tuned model to `checkpoints/spectral_resnet_torchgeo_best.pth`.
+
+For a different dataset, keep the same labeled-folder structure and update
+`CLASS_NAMES`, `BAND_ORDER`, and `SPLITS_PATH` in
+`src/train_spectral_resnet_torchgeo.py` to match its labels and split file.
+
 ## Developer Setup Steps
 
 ### 0. Switch to virtual environment and install requirements.txt

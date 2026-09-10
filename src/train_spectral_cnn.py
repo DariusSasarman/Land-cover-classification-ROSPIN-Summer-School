@@ -130,7 +130,6 @@ def calculate_band_statistics(samples, indices):
 def build_model(num_classes, pretrained):
     weights = ResNet18_Weights.DEFAULT if pretrained else None
     model = resnet18(weights=weights)
-
     old_conv = model.conv1
     new_conv = nn.Conv2d(
         13,
