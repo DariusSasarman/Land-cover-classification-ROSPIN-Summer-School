@@ -5,7 +5,8 @@ import { submitAoiRequest } from '../utils/requestApi.js'
 import { useAuth } from '../context/AuthContext.jsx'
 
 const STORAGE_KEY = 'landobservator_aoi_draft'
-const SENTINEL_2_MIN_DATE = '2015-06-23'
+const SENTINEL_2_MIN_DATE = '2017-06-01'
+const SENTINEL_2_MAX_DATE = new Date().toISOString().split('T')[0]
 
 const INITIAL = {
   region: '',
@@ -583,6 +584,7 @@ export default function RequestForm({ setActiveTab }) {
             name="startDate"
             type="date"
             min={SENTINEL_2_MIN_DATE}
+            max={SENTINEL_2_MAX_DATE}
             value={form.startDate}
             onChange={handleChange}
           />
@@ -596,6 +598,7 @@ export default function RequestForm({ setActiveTab }) {
             name="endDate"
             type="date"
             min={SENTINEL_2_MIN_DATE}
+            max={SENTINEL_2_MAX_DATE}
             value={form.endDate}
             onChange={handleChange}
           />
