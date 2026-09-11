@@ -4,27 +4,21 @@ Project developed during [Rospin Summer School](https://github.com/Romanian-Spac
 
 This project targets the task of *Land use land cover classification task* using machine learning.
 
-### Fine-tune the local 13-band `.pth` model
+## Project structure
 
-The checkpoint `notebooks/resnet18_sentinel2_all_moco.pth` contains the
-pretrained 13-band ResNet-18 backbone. Fine-tune it on labeled multispectral
-GeoTIFFs with:
+| Directory | Contains |
+|---|---|
+| **Data** | The splits and images used during training. |
+| **Notebooks** | The notebooks used during the research phase of the project. |
+| **Reports** | Reports regarding the performance of the models we studied. |
+| **Src** | Several scripts implementing the pipeline we built for this project, described below. |
+| **Webserver** | The website built around the model and pipeline we developed. |
 
-```bash
-python ./src/train_spectral_resnet_torchgeo.py `
-  --weights ./notebooks/resnet18_sentinel2_all_moco.pth
-```
+## How does the website look?
 
-The current loader expects one directory per EuroSAT class under
-`data/raw/EuroSATallBands`, with 13 bands in Sentinel-2 order and reflectance
-values scaled by 10000. It creates a new 10-class head and saves the best
-fine-tuned model to `checkpoints/spectral_resnet_torchgeo_best.pth`.
+[demo.webm](https://github.com/user-attachments/assets/480abc95-1484-47cc-8d25-05122838c0c8)
 
-For a different dataset, keep the same labeled-folder structure and update
-`CLASS_NAMES`, `BAND_ORDER`, and `SPLITS_PATH` in
-`src/train_spectral_resnet_torchgeo.py` to match its labels and split file.
-
-## Developer Setup Steps
+## Pipeline setup steps
 
 ### 0. Switch to virtual environment and install requirements.txt
 
@@ -34,7 +28,7 @@ For a different dataset, keep the same labeled-folder structure and update
     pip install -r requirements.txt
 ```
 
-### 1. Download the model itself
+### 1. Download the model itself ( work in progress, new better model incoming)
 
 ```bash
 
@@ -70,7 +64,7 @@ Both scripts should download similar "./data/raw/sentinel2_aoi.tif".
 
 The first one uses the Copernicus api and the second one uses the Google Earth Engine.
 
-### 3. Tile the Sentinel-2 image
+### 3. Tile the Sentinel-2 image 
 
 ```bash
 
@@ -82,7 +76,7 @@ Should see "./data/processed/tiles" appear.
 
 This step tiles the Sentinel-2 data of our target location.
 
-### 4. Run inference on the target tiles
+### 4. Run inference on the target tiles ( work in progress, new better model incoming)
 
 #### !!! This step is computationally intensive. Run it on a machine capable of handling it !!!
 
