@@ -255,6 +255,27 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
 
         {currentResponse && (
           <aside className="demo-viewer__sidebar">
+            
+            <div className="demo-detail__charts demo-detail__charts--row">
+              <div className="demo-graph-picker__label">  Pick a time graph</div>
+              
+
+              <div className="demo-graph-picker__buttons demo-graph-picker__buttons--col">
+                {graphChoices.map((choice) => (
+                  <button
+                    key={choice.id}
+                    type="button"
+                    className={selectedGraphId === choice.id ? 'demo-graph-picker__button demo-graph-picker__button--active' : 'demo-graph-picker__button'}
+                    onClick={() => setSelectedGraphId(choice.id)}
+                  >
+                    {choice.label}
+                  </button>
+                ))}
+              </div>
+
+              <TimeSeriesChart history={history} classId={selectedGraphId} />
+            </div>
+
             <div className="demo-viewer__insights">
               <div className="demo-viewer__legend-title">Generated insights</div>
               <p className="demo-viewer__insight-summary">{currentResponse.title}</p>
@@ -273,25 +294,7 @@ export default function LandCoverExplorer({ responses, response, area: propArea 
               </div>
             </div>
 
-            <div className="demo-detail__charts">
-              <div className="demo-graph-picker">
-                <div className="demo-graph-picker__label">Pick a time graph</div>
-                <div className="demo-graph-picker__buttons">
-                  {graphChoices.map((choice) => (
-                    <button
-                      key={choice.id}
-                      type="button"
-                      className={selectedGraphId === choice.id ? 'demo-graph-picker__button demo-graph-picker__button--active' : 'demo-graph-picker__button'}
-                      onClick={() => setSelectedGraphId(choice.id)}
-                    >
-                      {choice.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <TimeSeriesChart history={history} classId={selectedGraphId} />
-            </div>
+            
           </aside>
         )}
       </div>
