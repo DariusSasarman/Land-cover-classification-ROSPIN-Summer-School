@@ -1,17 +1,14 @@
 from typing import Dict
 
 import torch
-from PIL import Image
-from torchvision.models import ResNet18_Weights
+import numpy as np
+import torch.nn.functional as F
 
 from app.ml_engine.ResNet18M3 import ResNet18_M3
 from app.ml_engine.EurosatClasses import EUROSAT_CLASS_ORDER
 from app.logger import get_logger
 
 logger = get_logger("ml_engine.LandCoverClassifier")
-
-_TRANSFORM = ResNet18_Weights.DEFAULT.transforms()
-
 
 class LandCoverClassifier:
     _instance = None
@@ -28,8 +25,20 @@ class LandCoverClassifier:
             cls._instance = LandCoverClassifier()
         return cls._instance
 
-    def classify(self, image: Image.Image) -> Dict[str, float]:
-        tensor = _TRANSFORM(image.convert("RGB")).unsqueeze(0).to(self._device)
+    def classify(self, bands: np.ndarray) -> Dict[str, float]:
+        if bands.ndim != 3 or bands.shape[-1] != 13:
+            raise ValueError(
+                f"Expected an HWC 13-band Sentinel-2 tile, got {bands.shape}"
+            )
+
+        # Copernicus REFLECTANCE values are already scaled to [0, 1].
+        tensor = torch.from_numpy(bands).permute(2, 0, 1).float()
+        tensor = F.interpolate(
+            tensor.unsqueeze(0),
+            size=(224, 224),
+            mode="bilinear",
+            align_corners=False,
+        ).to(self._device)
 
         with torch.no_grad():
             logits = self._model(tensor)

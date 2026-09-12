@@ -11,6 +11,8 @@ __pycache__/
 *.pkl
 checkpoints/
 model/
+!webserver/backend/app/model/
+!webserver/backend/app/model/**/*.py
 *.npy
 *.pth
 *.tif
