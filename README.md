@@ -102,6 +102,6 @@ A window should appear on your screen.
 
 The map inside said window represents the inference applied on the map.
 
-You can zoom in/out and change the the transparency level of the classification.
+You can zoom in/out and change the transparency level of the classification.
 
 There's also a button that saves the current state of the plot as a png.
