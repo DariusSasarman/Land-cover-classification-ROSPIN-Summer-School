@@ -377,87 +377,91 @@ class CopernicusClient:
         original_duration = requested_to - requested_date
 
         last_ratio = 0.0
+        directions = {1,-1}
+        for direction in directions:
 
-        for attempt in range(
-            _MAX_TIME_SHIFT_ATTEMPTS + 1
-        ):
-            offset_days = (
-                attempt * _TIME_SHIFT_STEP_DAYS
-            )
-
-            shifted_from = _shift_iso(
-                time_from,
-                offset_days,
-            )
-
-            shifted_to = _shift_iso(
-                time_to,
-                offset_days,
-            )
-
-            shifted_date = datetime.fromisoformat(
-                shifted_from.replace("Z", "+00:00")
-            )
-
-            now = datetime.now(
-                tz=shifted_date.tzinfo
-            )
-
-            if shifted_date > now:
-                logger.warning(
-                    "Reached present date while searching for "
-                    "usable imagery; stopping time-shift search."
-                )
-                break
-
-            logger.info(
-                "Trying Sentinel-2 imagery: "
-                "%s to %s (fallback +%dd)",
-                shifted_from,
-                shifted_to,
-                offset_days,
-            )
-
-            content = self._fetch_once(
-                west=west,
-                south=south,
-                east=east,
-                north=north,
-                width=width,
-                height=height,
-                time_from=shifted_from,
-                time_to=shifted_to,
-                max_cloud_coverage=max_cloud_coverage,
-            )
-
-            blank_ratio = _blank_pixel_ratio(content)
-
-            last_ratio = blank_ratio
-
-            if (
-                blank_ratio
-                <= _MAX_BLANK_PIXEL_RATIO
+            for attempt in range(
+                _MAX_TIME_SHIFT_ATTEMPTS + 1
             ):
-                if attempt > 0:
-                    logger.info(
-                        "Usable image found after shifting "
-                        "+%d days (blank ratio: %.1f%%)",
-                        offset_days,
-                        blank_ratio * 100,
+                offset_days = (
+                    direction * attempt * _TIME_SHIFT_STEP_DAYS
+                )
+
+                shifted_from = _shift_iso(
+                    time_from,
+                    offset_days,
+                )
+
+                shifted_to = _shift_iso(
+                    time_to,
+                    offset_days,
+                )
+
+                shifted_date = datetime.fromisoformat(
+                    shifted_from.replace("Z", "+00:00")
+                )
+
+                now = datetime.now(
+                    tz=shifted_date.tzinfo
+                )
+
+                if shifted_date > now:
+                    logger.warning(
+                        "Reached present date while searching for "
+                        "usable imagery; stopping time-shift search."
                     )
+                    break
 
-                return content
+                logger.info(
+                    "Trying Sentinel-2 imagery: "
+                    "%s to %s (fallback +%dd)",
+                    shifted_from,
+                    shifted_to,
+                    offset_days,
+                )
 
-            logger.warning(
-                "Image %.1f%% blank/clouded "
-                "(threshold %.0f%%) for %s to %s. "
-                "Shifting forward %d days and retrying.",
-                blank_ratio * 100,
-                _MAX_BLANK_PIXEL_RATIO * 100,
-                shifted_from,
-                shifted_to,
-                _TIME_SHIFT_STEP_DAYS,
-            )
+                content = self._fetch_once(
+                    west=west,
+                    south=south,
+                    east=east,
+                    north=north,
+                    width=width,
+                    height=height,
+                    time_from=shifted_from,
+                    time_to=shifted_to,
+                    max_cloud_coverage=max_cloud_coverage,
+                )
+
+                blank_ratio = _blank_pixel_ratio(content)
+
+                last_ratio = blank_ratio
+
+                if (
+                    blank_ratio
+                    <= _MAX_BLANK_PIXEL_RATIO
+                ):
+                    if attempt > 0:
+                        logger.info(
+                            "Usable image found after shifting "
+                            "+%d days (blank ratio: %.1f%%)",
+                            offset_days,
+                            blank_ratio * 100,
+                        )
+
+                    return content
+
+                logger.warning(
+                    "Image %.1f%% blank/clouded "
+                    "(threshold %.0f%%) for %s to %s. "
+                    "Shifting forward %d days and retrying.",
+                    blank_ratio * 100,
+                    _MAX_BLANK_PIXEL_RATIO * 100,
+                    shifted_from,
+                    shifted_to,
+                    _TIME_SHIFT_STEP_DAYS,
+                )
+
+                
 
         logger.error(
             "No usable Sentinel-2 imagery found within "

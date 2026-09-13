@@ -675,6 +675,33 @@ main {
   margin-top: 1rem;
 }
 
+.insights-markdown {
+  margin-top: 0.65rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.insights-markdown h1,
+.insights-markdown h2,
+.insights-markdown h3 {
+  color: var(--text-h);
+  margin: 0.85rem 0 0.4rem;
+}
+.insights-markdown p { margin: 0.5rem 0; }
+.insights-markdown ul,
+.insights-markdown ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+.insights-markdown li { margin: 0.3rem 0; }
+.insights-markdown strong { color: var(--text-h); }
+.insights-markdown code {
+  background: var(--bg-elevated);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+
 .demo-viewer__insights {
   margin-top: 1rem;
   padding: 0.95rem;
