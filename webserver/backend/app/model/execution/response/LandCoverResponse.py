@@ -9,5 +9,5 @@ class LandCoverResponse(BaseModel):
     id: str
     title: str
     status: str
-    insights: List[str]
+    insights: str
     History: List[HistoryItem]
