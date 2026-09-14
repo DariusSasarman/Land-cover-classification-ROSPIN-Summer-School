@@ -16,7 +16,8 @@ This project targets the task of *Land use land cover classification task* using
 
 ## How does the website look?
 
-[demo.webm](https://github.com/user-attachments/assets/480abc95-1484-47cc-8d25-05122838c0c8)
+[Demo.webm](https://github.com/user-attachments/assets/7575da19-40f0-419d-a30f-ad8ce6a4587a)
+
 
 ## Pipeline setup steps
 
