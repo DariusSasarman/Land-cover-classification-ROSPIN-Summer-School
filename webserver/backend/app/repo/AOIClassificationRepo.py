@@ -1,4 +1,5 @@
 from typing import List
+
 from app.model.execution.response.LandCoverResponse import LandCoverResponse
 from app.storage.db import get_db, init_db
 from app.logger import get_logger
@@ -38,5 +39,5 @@ class AOIClassificationRepo:
                 (email,),
             )
             rows = cursor.fetchall()
-            logger.debug("Found %d AOI classifications for email: %s", len(rows), email)
-            return [LandCoverResponse.model_validate_json(row["data"]) for row in rows]
+        logger.debug("Found %d AOI classifications for email: %s", len(rows), email)
+        return [LandCoverResponse.model_validate_json(row["data"]) for row in rows]

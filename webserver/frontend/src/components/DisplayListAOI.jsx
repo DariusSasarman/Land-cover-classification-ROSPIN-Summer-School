@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import LandCoverExplorer from './LandCoverExplorer.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { fetchAoiList } from '../utils/requestApi.js'
+import { getMainLandType } from '../utils/aoiUtils.js'
 
 const POLL_INTERVAL_MS = 4000
 
 export default function DisplayListAOI() {
   const { token, logout } = useAuth()
   const [responses, setResponses] = useState([])
+  const [selectedId, setSelectedId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const pollRef = useRef(null)
@@ -34,6 +36,9 @@ export default function DisplayListAOI() {
         const data = await fetchAoiList(token)
         if (!active) return
         setResponses(data)
+        if (data && data.length > 0) {
+          setSelectedId((prev) => prev ?? data[0].id)
+        }
       } catch (err) {
         if (active) setError(err.message)
       } finally {
@@ -72,6 +77,11 @@ export default function DisplayListAOI() {
     }
   }, [hasInProgress, token])
 
+  const selected = useMemo(() => {
+    if (!responses || responses.length === 0) return null
+    return responses.find((item) => item.id === selectedId) ?? responses[0]
+  }, [responses, selectedId])
+
   return (
     <section className="demo-explorer" id="my-aois">
       <div className="section-header">
@@ -88,12 +98,40 @@ export default function DisplayListAOI() {
           You haven't requested any AOIs yet.
         </p>
       ) : (
-        <LandCoverExplorer responses={responses} />
+        <div className="demo-explorer__layout">
+          <LandCoverExplorer response={selected} />
+
+          {responses.length > 1 && (
+            <aside className="demo-list demo-list--stacked demo-list--bottom" aria-label="My AOIs">
+              {responses.map((item) => {
+                const mainLand = getMainLandType(item)
+
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`demo-card${item.id === selected?.id ? ' demo-card--active' : ''}`}
+                    onClick={() => setSelectedId(item.id)}
+                  >
+                    <span className="demo-card__name">{item.title}</span>
+                    {mainLand ? (
+                      <span className="demo-card__tag" style={{ color: mainLand.color }}>
+                        {mainLand.label} · {mainLand.percentage.toFixed(1)}%
+                      </span>
+                    ) : item.status === 'in_progress' ? (
+                      <span className="demo-card__tag demo-card__tag--wip">Processing...</span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </aside>
+          )}
+        </div>
       )}
 
       <button type="button" className="btn btn--secondary" style={{ marginTop: '2rem' }} onClick={logout}>
-          Sign out
-        </button>
+        Sign out
+      </button>
     </section>
   )
 }

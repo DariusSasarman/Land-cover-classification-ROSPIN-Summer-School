@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 from PIL import Image
@@ -110,7 +110,7 @@ def classify_area(
     area: AreaSelection,
     time_from: str,
     time_to: str,
-) -> Classification:
+) -> Tuple[Classification, Image.Image, Image.Image]:
     tile_px = area.tile_px
     width_px = area.tile_count.x * tile_px
     height_px = area.tile_count.y * tile_px
@@ -151,15 +151,16 @@ def classify_area(
     logger.info("Class distribution for area '%s' (period '%s'): %s", area_id, period_id, area_percentages)
 
     rgb_image = Image.fromarray(rgb)
+    mask_image = build_mask_image(predicted_grid, rgb_image, tile_px)
 
-    rgb_url, mask_url = save_period_images(
-        area_id, period_id, rgb_image, build_mask_image(predicted_grid, rgb_image, tile_px)
-    )
+    rgb_url, mask_url = save_period_images(area_id, period_id, rgb_image, mask_image)
 
-    return Classification(
+    classification = Classification(
         index=period_index,
         period_desc=period_desc,
         Percentages={class_id: f"{pct}%" for class_id, pct in area_percentages.items()},
         RGB_IMAGE=rgb_url,
         Masked_IMAGE=mask_url,
     )
+
+    return classification, rgb_image, mask_image

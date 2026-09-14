@@ -38,7 +38,7 @@ def create_pending_AOI(user_jwt: str, payload: AOIRequest) -> Tuple[str, LandCov
         id=build_display_id(payload.requester.region, request_id),
         title=payload.requester.region or "Requested AOI",
         status="in_progress",
-        insights=["Your area of interest is being processed. Please check back shortly."],
+        insights="Your area of interest is being processed. Please check back shortly.",
         History=[],
     )
     AOIClassificationRepo.save(request_id, email, pending)
@@ -69,12 +69,13 @@ def create_user_AOI(request_id: str, user_jwt: str) -> LandCoverResponse:
         logger.info("Generated %d monitoring periods for request ID '%s'", len(periods), request_id)
 
         history = []
+        period_images = []
         for idx, period in enumerate(periods, start=1):
             logger.info(
                 "Processing period %d/%d ('%s') for request ID '%s'...",
                 idx, len(periods), period.period_desc, request_id,
             )
-            classification = classify_area(
+            classification, rgb_image, mask_image = classify_area(
                 area_id=request_id,
                 period_id=period.period_id,
                 period_desc=period.period_desc,
@@ -84,12 +85,13 @@ def create_user_AOI(request_id: str, user_jwt: str) -> LandCoverResponse:
                 time_to=period.time_to,
             )
             history.append(HistoryItem(Classification=classification))
+            period_images.append((period.period_desc, rgb_image, mask_image))
 
         result = LandCoverResponse(
             id=build_display_id(payload.requester.region, request_id),
             title=payload.requester.region or "Requested AOI",
             status="done",
-            insights=build_insights(payload.requester.region, history),
+            insights=build_insights(payload.requester.region, history, period_images),
             History=history,
         )
 
