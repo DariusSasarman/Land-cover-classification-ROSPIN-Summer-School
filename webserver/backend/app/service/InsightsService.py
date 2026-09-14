@@ -126,8 +126,9 @@ def build_insights(
 
             You are given:
 
-            1. A chronological history of land-cover classification percentages.
-            2. RGB satellite images corresponding to periods in that history.
+            1. RGB satellite images corresponding to periods in the observed history.
+            2. A chronological history of land-cover classification percentages, produced
+            by an automated classifier that can occasionally misclassify patches.
 
             The classification system contains these classes:
 
@@ -144,22 +145,26 @@ def build_insights(
 
             IMPORTANT EVIDENCE RULES:
 
-            - Classification percentages are model predictions, not ground-truth measurements.
-            - Never invent numerical values.
+            - The RGB imagery is your primary source of evidence. The classification
+            percentages are a secondary, relative signal: useful for spotting the
+            direction and rough scale of change across periods, but not a precise or
+            infallible measurement on their own.
+            - Never invent numerical values; only cite percentages that appear in the
+            supplied statistics.
+            - Before reporting a statistical change as a real land-cover change, check
+            whether it is visually plausible in the corresponding imagery. If the
+            imagery does not support a statistical shift, or contradicts it, say so
+            explicitly and lower your confidence rather than reporting the number at
+            face value.
             - Never invent events, construction, development, agricultural activity,
             environmental damage, or other causes that are not supported by the evidence.
-            - A change in classification does NOT automatically prove that real-world
-            land-cover change occurred.
             - Do not describe a change as environmental degradation unless the evidence
             actually supports that interpretation.
-            - Distinguish clearly between what is observed and what is inferred.
-            - When evidence is insufficient, explicitly state the uncertainty.
+            - Distinguish clearly between what is observed in the imagery, what the
+            classification percentages suggest, and what is inferred from combining them.
             - Prefer persistent trends across multiple periods over isolated fluctuations.
-            - Treat sudden one-period changes cautiously.
-            - Consider classification error, seasonal variation, image quality, and
-            acquisition differences when interpreting changes.
-            - The model can sometimes confuse visually similar classes. In particular,
-            apparent changes between River and Highway should be treated cautiously.
+            - Treat sudden one-period changes cautiously — if unconfirmed by the imagery,
+            treat them as more likely to be a classification artifact than a real change.
 
             NUMERICAL ANALYSIS:
 
@@ -190,7 +195,7 @@ def build_insights(
             - What are the most reasonable interpretations?
             - What should a property owner or land manager investigate next?
 
-            STATISTICAL HISTORY:
+            STATISTICAL HISTORY (relative/directional reference — verify against imagery):
 
             {json.dumps(history_data, indent=2)}
 
@@ -200,7 +205,7 @@ def build_insights(
 
             ## Executive Summary
 
-            Write 2–4 sentences summarizing the most important findings.
+            Write 2-4 sentences summarizing the most important findings.
 
             Mention:
             - the dominant land-cover pattern;
@@ -212,13 +217,14 @@ def build_insights(
 
             ## Key Findings
 
-            Provide 3–5 concise bullet points.
+            Provide 3-5 concise bullet points.
 
             Each finding should contain, where applicable:
             - the class involved;
             - the time period;
             - the numerical change;
             - the direction of change;
+            - whether the imagery corroborates it;
             - why the change is noteworthy.
 
             Prioritize meaningful findings over completeness.
@@ -239,7 +245,9 @@ def build_insights(
 
             ## Visual Observations
 
-            Use the RGB satellite imagery to support or challenge the statistical findings.
+            This is the core evidence section. Use the RGB satellite imagery as the
+            primary check on the statistical findings: confirm, adjust, or override
+            the classification numbers based on what is actually visible.
 
             Describe only patterns that are reasonably visible in the imagery.
 
@@ -250,27 +258,26 @@ def build_insights(
 
             For each major finding, distinguish between:
 
-            **Observation:** What the classification data or imagery directly shows.
+            **Observation:** What the imagery directly shows.
+
+            **Statistical signal:** What the classification percentages suggest, and
+            whether the imagery corroborates or contradicts it.
 
             **Interpretation:** What the observed pattern may indicate.
 
-            **Confidence:** High, Medium, or Low.
-
-            Use Low confidence when the interpretation could reasonably be explained by
-            classification uncertainty, seasonal effects, image conditions, or limited
-            temporal evidence.
+            **Confidence:** High, Medium, or Low. Use Low confidence whenever a
+            statistical change is not clearly corroborated by the imagery.
 
             Do not present hypotheses as confirmed facts.
 
             ## Recommended Follow-Up
 
-            Provide 1–3 practical follow-up actions only when justified by the findings.
+            Provide 1-3 practical follow-up actions only when justified by the findings.
 
             Examples:
             - inspect additional acquisition dates;
             - review higher-resolution imagery;
             - investigate a specific apparent land-cover transition;
-            - validate a suspicious classification;
             - continue monitoring a persistent trend.
 
             Do not recommend actions merely to fill the section.
@@ -296,12 +303,14 @@ def build_insights(
 
             Before producing the report, verify that:
 
-            1. Every numerical claim is supported by the supplied statistics.
+            1. Every numerical claim is grounded in the supplied statistics AND
+            cross-checked against the imagery wherever imagery is available.
             2. Every visual claim is supported by the supplied imagery.
             3. Major changes are quantified where possible.
-            4. Observations are separated from interpretations.
-            5. Uncertain conclusions are explicitly marked as uncertain.
-            6. No causes or events have been fabricated.
+            4. Observations, statistical signals, and interpretations are clearly separated.
+            5. No causes or events have been fabricated.
+            6. Statistical changes unconfirmed by imagery are flagged with lower confidence
+            rather than reported as fact.
             7. The report contains actual insights rather than a restatement of the data.
 
             Return ONLY the Markdown report.
@@ -314,9 +323,11 @@ def build_insights(
 
         contents.append(
             f"Analyze this timeline sequence for {region or 'the area'}. "
-            "Validate or expand upon the pre-extracted insights. "
-            "Detail environmental degradation, growth spikes, or major shifts visible "
-            "across the mask and RGB layers. Provide a concise executive report."
+            "Use the classification percentages only as a relative, directional signal — "
+            "ground every claim primarily in what is visible across the RGB imagery, and "
+            "flag any statistical change the imagery doesn't support. Detail environmental "
+            "degradation, growth spikes, or major shifts only where the imagery itself "
+            "supports them. Provide a concise executive report."
         )
 
         _rate_limiter.acquire()

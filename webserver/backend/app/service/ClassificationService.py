@@ -34,9 +34,9 @@ def _chunk_ranges(total_tiles: int, max_tiles: int):
     return ranges
 
 
-def _fetch_bands_mosaic(area: AreaSelection, time_from: str, time_to: str) -> np.ndarray:
+def _fetch_rgb_mosaic(area: AreaSelection, time_from: str, time_to: str) -> np.ndarray:
     """
-    Fetches all Sentinel-2 bands for the full AOI, splitting into multiple Copernicus
+    Fetches the RGB array for the full AOI, splitting into multiple Copernicus
     requests and stitching them into one mosaic when the AOI exceeds the
     Process API's per-request pixel dimension limit.
     """
@@ -59,7 +59,7 @@ def _fetch_bands_mosaic(area: AreaSelection, time_from: str, time_to: str) -> np
             time_from=time_from,
             time_to=time_to,
         )
-        return read_bands(tiff_bytes)
+        return bands_to_rgb(read_bands(tiff_bytes))
 
     logger.info(
         "AOI %dx%d px exceeds Copernicus %dpx limit, splitting into %dx%d chunk grid (%d requests)...",
@@ -71,7 +71,7 @@ def _fetch_bands_mosaic(area: AreaSelection, time_from: str, time_to: str) -> np
     lon_span = east - west
     lat_span = north - south
 
-    mosaic = np.zeros((height_px, width_px, 13), dtype=np.float32)
+    mosaic = np.zeros((height_px, width_px, 3), dtype=np.uint8)
 
     for y_start_tile, y_count_tile in y_chunks:
         y0, y1 = y_start_tile * tile_px, (y_start_tile + y_count_tile) * tile_px
@@ -97,7 +97,7 @@ def _fetch_bands_mosaic(area: AreaSelection, time_from: str, time_to: str) -> np
                 time_from=time_from,
                 time_to=time_to,
             )
-            mosaic[y0:y1, x0:x1, :] = read_bands(tiff_bytes)
+            mosaic[y0:y1, x0:x1, :] = bands_to_rgb(read_bands(tiff_bytes))
 
     return mosaic
 
@@ -125,9 +125,8 @@ def classify_area(
         area.tile_count.y,
     )
 
-    bands = _fetch_bands_mosaic(area, time_from, time_to)
-    rgb = bands_to_rgb(bands)
-    tiles = tile_grid(bands, tile_px=tile_px)
+    rgb = _fetch_rgb_mosaic(area, time_from, time_to)
+    tiles = tile_grid(rgb, tile_px=tile_px)
 
     classifier = LandCoverClassifier.get_instance()
     predicted_grid: List[List[str]] = []
