@@ -58,16 +58,13 @@ EVALSCRIPT = """
 function setup() {
     return {
         input: [{
-            bands: [
-                "B01", "B02", "B03", "B04", "B05", "B06", "B07",
-                "B08", "B8A", "B09", "B10", "B11", "B12", "dataMask"
-            ],
+            bands: ["B02", "B03", "B04", "B08", "B11", "B12", "dataMask"],
             units: "REFLECTANCE"
         }],
         mosaicking: Mosaicking.ORBIT,
         output: {
             id: "default",
-            bands: 13,
+            bands: 6,
             sampleType: "FLOAT32"
         }
     };
@@ -86,38 +83,36 @@ function median(values) {
 }
 
 function evaluatePixel(samples) {
-    var bands = [];
-    for (var band = 0; band < 13; band++) {
-        bands.push([]);
-    }
+    var B02 = [];
+    var B03 = [];
+    var B04 = [];
+    var B08 = [];
+    var B11 = [];
+    var B12 = [];
 
     for (var i = 0; i < samples.length; i++) {
         if (samples[i].dataMask == 1) {
-            bands[0].push(samples[i].B01);
-            bands[1].push(samples[i].B02);
-            bands[2].push(samples[i].B03);
-            bands[3].push(samples[i].B04);
-            bands[4].push(samples[i].B05);
-            bands[5].push(samples[i].B06);
-            bands[6].push(samples[i].B07);
-            bands[7].push(samples[i].B08);
-            bands[8].push(samples[i].B8A);
-            bands[9].push(samples[i].B09);
-            bands[10].push(samples[i].B10);
-            bands[11].push(samples[i].B11);
-            bands[12].push(samples[i].B12);
+            B02.push(samples[i].B02);
+            B03.push(samples[i].B03);
+            B04.push(samples[i].B04);
+            B08.push(samples[i].B08);
+            B11.push(samples[i].B11);
+            B12.push(samples[i].B12);
         }
     }
 
-    if (bands[0].length == 0) {
-        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    if (B02.length == 0) {
+        return [0, 0, 0, 0, 0, 0];
     }
 
-    var result = [];
-    for (var j = 0; j < 13; j++) {
-        result.push(median(bands[j]));
-    }
-    return result;
+    return [
+        median(B02),
+        median(B03),
+        median(B04),
+        median(B08),
+        median(B11),
+        median(B12)
+    ];
 }
 """
 
@@ -168,11 +163,10 @@ def _blank_pixel_ratio(content: bytes) -> float:
         )
         return 0.0
 
-    if array.shape[0] == 13 and array.shape[-1] != 13:
-        array = np.moveaxis(array, 0, -1)
+    
 
-    # Expected shape is (H, W, 13).
-    if array.shape[-1] != 13:
+    # Expected shape is (H, W, 6).
+    if array.shape[-1] != 6:
         logger.warning(
             "Unexpected number of GeoTIFF bands: %s",
             array.shape,
@@ -524,8 +518,7 @@ class CopernicusClient:
                     },
                     "data": [
                         {
-                            # L1C exposes all 13 bands, including B10.
-                            "type": "sentinel-2-l1c",
+                            "type": "sentinel-2-l2a",
                             "dataFilter": {
                                 "timeRange": {
                                     "from": time_from,
