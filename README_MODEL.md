@@ -11,7 +11,7 @@ This repository contains training, evaluation, and deployment code for several b
 | Model | Input / Bands | Accuracy | Macro F1 | Role | Evaluation Report | Weights / Checkpoint |
 | :--- | :---: | :---: | :---: | :--- | :--- | :--- |
 | ResNet-18 (RGB) | 3 bands (RGB) | 97% | 0.97 | Production web model | [reports/resnet18_m3_report.txt](reports/resnet18_m3_report.txt) | [model/resnet18_m3_best.pth](model/resnet18_m3_best.pth) |
-| Spectral ResNet-18 (TorchGeo) | 13 bands | 99% | 0.99 | High-accuracy benchmark | Benchmark report not included in this repository | [checkpoints/spectral_resnet_torchgeo_best.pth](checkpoints/spectral_resnet_torchgeo_best.pth) |
+| Spectral ResNet-18 (TorchGeo) | 13 bands | 99% | 0.99 | High-accuracy benchmark | [reports/spectral_resnet_torchgeo_report.txt](reports/spectral_resnet_torchgeo_report.txt) | [checkpoints/spectral_resnet_torchgeo_best.pth](checkpoints/spectral_resnet_torchgeo_best.pth) |
 | ResNet-50 (RGB) | 3 bands (RGB) | 98% | 0.98 | Larger benchmark backbone | [reports/resnet50_report.txt](reports/resnet50_report.txt) | Not packaged in this repository |
 | Spectral Random Forest | Spectral features | 87% | 0.86 | Traditional ML baseline | [reports/spectral_rf_report.txt](reports/spectral_rf_report.txt) | Not packaged in this repository |
 | Baseline Random Forest | Basic features | 80% | 0.78 | Initial ML baseline | [reports/baseline_rf_report.txt](reports/baseline_rf_report.txt) | Not packaged in this repository |
@@ -93,6 +93,7 @@ Confusion matrix:
 
 - Accuracy: 99%
 - Macro F1: 0.99
+- Full report: [reports/spectral_resnet_torchgeo_report.txt](reports/spectral_resnet_torchgeo_report.txt)
 - Model checkpoint: [checkpoints/spectral_resnet_torchgeo_best.pth](checkpoints/spectral_resnet_torchgeo_best.pth)
 
 Classification report (summary from benchmark training):
@@ -285,6 +286,7 @@ These findings indicate that model performance remains excellent on benchmark da
 - Project root: [README.md](README.md)
 - Baseline RF report: [reports/baseline_rf_report.txt](reports/baseline_rf_report.txt)
 - Spectral RF report: [reports/spectral_rf_report.txt](reports/spectral_rf_report.txt)
+- Spectral ResNet-18 report: [reports/spectral_resnet_torchgeo_report.txt](reports/spectral_resnet_torchgeo_report.txt)
 - ResNet-18 report: [reports/resnet18_m3_report.txt](reports/resnet18_m3_report.txt)
 - ResNet-50 report: [reports/resnet50_report.txt](reports/resnet50_report.txt)
 - Production model: [model/resnet18_m3_best.pth](model/resnet18_m3_best.pth)
