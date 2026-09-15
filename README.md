@@ -29,7 +29,7 @@ This project targets the task of *Land use land cover classification task* using
     pip install -r requirements.txt
 ```
 
-### 1. Download the model itself ( work in progress, new better model incoming)
+### 1. Download the model itself 
 
 ```bash
 
@@ -77,9 +77,7 @@ Should see "./data/processed/tiles" appear.
 
 This step tiles the Sentinel-2 data of our target location.
 
-### 4. Run inference on the target tiles ( work in progress, new better model incoming)
-
-#### !!! This step is computationally intensive. Run it on a machine capable of handling it !!!
+### 4. Run inference on the target tiles 
 
 ```bash
 
