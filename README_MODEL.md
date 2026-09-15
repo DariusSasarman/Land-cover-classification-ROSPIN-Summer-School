@@ -281,7 +281,53 @@ These findings indicate that model performance remains excellent on benchmark da
 
 ---
 
-## 5. Quick Links
+## 5. System Architecture & Data Pipeline
+
+The live web deployment processes remote sensing data through a four-stage pipeline:
+
+1. Satellite ingestion: raw surface reflectance tiles are fetched from the Copernicus Open Access API.
+2. Preprocessing: data is normalized and transformed into standardized RGB channels (Bands 4, 3, 2).
+3. Deep feature extraction: the RGB image is passed through a fine-tuned ResNet-18 network to capture spatial textures and patterns.
+4. Classification output: the model emits a probability distribution across 10 land-cover classes and returns the highest-confidence class to the user interface.
+
+```mermaid
+graph TD
+    A[Sentinel-2 Satellite] -->|Captures Raw Surface Reflectance| B[Copernicus Open Access API]
+    B -->|Fetches Tile Data| C[Preprocessing & Normalization]
+
+    subgraph Input Pipeline
+        C --> D[RGB Image Extraction B4, B3, B2]
+        C -.->|Excluded for Web Deployment| E[13-Band Multispectral GeoTIFF]
+    end
+
+    subgraph Feature Extraction & Model Inference
+        D --> F[ResNet-18 Model]
+        F --> G[Convolutional Layers]
+        G -->|Extracts Spatial Features & Edges| H[Global Average Pooling]
+        H -->|10-Class Probability Vector| I[Softmax Classification Layer]
+    end
+
+    subgraph Outputs & Deployment
+        I --> J[Predicted Land Cover Class]
+        I --> K[Web Application / User Dashboard]
+    end
+
+    style A fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#0f766e,stroke:#14b8a6,stroke-width:2px,color:#fff
+    style F fill:#4338ca,stroke:#818cf8,stroke-width:2px,color:#fff
+    style K fill:#047857,stroke:#34d399,stroke-width:2px,color:#fff
+```
+
+### Step-by-step interpretation
+
+1. Data acquisition: Sentinel-2 satellites capture reflected light from Earth in multiple spectral bands. The backend requests matching tiles from the Copernicus API for the selected AOI.
+2. Preprocessing and band selection: raw satellite data is normalized and converted to standard imagery. Although the full dataset contains 13 bands, the production web model uses only RGB channels to reduce payload size and simplify deployment.
+3. Spatial feature extraction: the RGB image is fed into ResNet-18, which learns spatial patterns such as field boundaries, edges, water shapes, and building structures.
+4. Classification and web rendering: the final layer outputs class probabilities; the most probable land-cover class is displayed to the user in the web application.
+
+---
+
+## 6. Quick Links
 
 - Project root: [README.md](README.md)
 - Baseline RF report: [reports/baseline_rf_report.txt](reports/baseline_rf_report.txt)
