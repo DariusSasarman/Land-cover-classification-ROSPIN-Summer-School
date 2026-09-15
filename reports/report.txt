@@ -1,0 +1,4 @@
+Best model by weighted F1: Spectral (all bands)+Resnet18
+Accuracy: 0.990
+Macro F1: 0.990
+Weighted F1: 0.990

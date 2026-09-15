@@ -13,7 +13,8 @@ REPORTS_ROOT = os.path.join(REPO_ROOT, "reports")
 REPORTS = {
     "Baseline (RGB stats)": os.path.join(REPORTS_ROOT, "baseline_rf_report.txt"),
     "Spectral (B08/B11/B12 + indices)": os.path.join(REPORTS_ROOT, "spectral_rf_report.txt"),
-"Spectral (all bands)": os.path.join(REPORTS_ROOT, "spectral_resnet_torchgeo_report.txt"),
+"Spectral (all bands)+Resnet18": os.path.join(REPORTS_ROOT, "spectral_resnet_torchgeo_report.txt"),
+"Resnet50(RGB)": os.path.join(REPORTS_ROOT, "resnet50_report.txt"),
 "Resnet18_m3 (RGB)": os.path.join(REPORTS_ROOT, "resnet18_m3_report.txt"),
 }
 
@@ -57,10 +58,20 @@ def main():
     output = "\n".join(lines)
     print(output)
 
-    os.makedirs("reports", exist_ok=True)
-    with open("reports/comparison_report.txt", "w") as f:
+    os.makedirs(REPORTS_ROOT, exist_ok=True)
+    with open(os.path.join(REPORTS_ROOT, "comparison_report.txt"), "w") as f:
         f.write(output)
-    print("\nSaved to reports/comparison_report.txt")
+
+    best = results[winner]
+    best_report = (
+        f"Best model by weighted F1: {winner}\n"
+        f"Accuracy: {best['accuracy']:.3f}\n"
+        f"Macro F1: {best['macro_f1']:.3f}\n"
+        f"Weighted F1: {best['weighted_f1']:.3f}\n"
+    )
+    with open(os.path.join(REPORTS_ROOT, "report.txt"), "w") as f:
+        f.write(best_report)
+    print("\nSaved to reports/comparison_report.txt and reports/report.txt")
 
 
 if __name__ == "__main__":
