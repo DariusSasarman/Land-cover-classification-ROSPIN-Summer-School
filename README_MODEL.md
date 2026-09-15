@@ -292,30 +292,37 @@ The live web deployment processes remote sensing data through a four-stage pipel
 
 ```mermaid
 graph TD
-    A[Sentinel-2 Satellite] -->|Captures Raw Surface Reflectance| B[Copernicus Open Access API]
-    B -->|Fetches Tile Data| C[Preprocessing & Normalization]
+    A[Sentinel-2 Satellite] -->|Captures raw reflectance| B[Copernicus API]
+    B -->|Downloads AOI tiles| C[Preprocess & Normalize]
 
-    subgraph Input Pipeline
-        C --> D[RGB Image Extraction B4, B3, B2]
-        C -.->|Excluded for Web Deployment| E[13-Band Multispectral GeoTIFF]
+    subgraph Input Pipeline[Input Pipeline]
+        C --> D[Extract RGB Bands<br/>B4, B3, B2]
+        C -.->|Not used in web model| E[13-band multispectral data]
     end
 
-    subgraph Feature Extraction & Model Inference
-        D --> F[ResNet-18 Model]
-        F --> G[Convolutional Layers]
-        G -->|Extracts Spatial Features & Edges| H[Global Average Pooling]
-        H -->|10-Class Probability Vector| I[Softmax Classification Layer]
+    subgraph Model Pipeline[Feature Extraction & Inference]
+        D --> F[ResNet-18 CNN]
+        F --> G[Convolutional blocks]
+        G -->|Learn spatial context| H[Global average pooling]
+        H -->|Probability vector| I[Softmax classifier]
     end
 
-    subgraph Outputs & Deployment
-        I --> J[Predicted Land Cover Class]
-        I --> K[Web Application / User Dashboard]
+    subgraph Output Pipeline[Outputs & Deployment]
+        I --> J[Predicted land-cover class]
+        J --> K[Web dashboard / API response]
     end
 
-    style A fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
-    style D fill:#0f766e,stroke:#14b8a6,stroke-width:2px,color:#fff
-    style F fill:#4338ca,stroke:#818cf8,stroke-width:2px,color:#fff
-    style K fill:#047857,stroke:#34d399,stroke-width:2px,color:#fff
+    classDef satellite fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff;
+    classDef api fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#111827;
+    classDef prep fill:#ccfbf1,stroke:#0f766e,stroke-width:2px,color:#111827;
+    classDef model fill:#e0e7ff,stroke:#4338ca,stroke-width:2px,color:#111827;
+    classDef output fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#111827;
+
+    class A satellite;
+    class B api;
+    class C,D,E prep;
+    class F,G,H,I model;
+    class J,K output;
 ```
 
 ### Step-by-step interpretation

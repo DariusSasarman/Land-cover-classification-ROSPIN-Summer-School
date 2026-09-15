@@ -13,6 +13,8 @@ REPORTS_ROOT = os.path.join(REPO_ROOT, "reports")
 REPORTS = {
     "Baseline (RGB stats)": os.path.join(REPORTS_ROOT, "baseline_rf_report.txt"),
     "Spectral (B08/B11/B12 + indices)": os.path.join(REPORTS_ROOT, "spectral_rf_report.txt"),
+"Spectral (all bands)": os.path.join(REPORTS_ROOT, "spectral_resnet_torchgeo_report.txt"),
+"Resnet18_m3 (RGB)": os.path.join(REPORTS_ROOT, "resnet18_m3_report.txt"),
 }
 
 
