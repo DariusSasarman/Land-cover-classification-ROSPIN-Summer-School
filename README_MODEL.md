@@ -344,3 +344,9 @@ graph TD
 - ResNet-50 report: [reports/resnet50_report.txt](reports/resnet50_report.txt)
 - Production model: [model/resnet18_m3_best.pth](model/resnet18_m3_best.pth)
 - Benchmark checkpoint: [checkpoints/spectral_resnet_torchgeo_best.pth](checkpoints/spectral_resnet_torchgeo_best.pth)
+
+## 7. Inference over a Romanian area of interest
+
+<img width="3755" height="1436" alt="overlay_map" src="https://github.com/user-attachments/assets/977642a3-3797-496b-9ea1-b51d6251dac1" />
+
+Failure points : Because Cluj-Napoca has areas with high levels of vegetation, some Residential/Industrial areas end up classified as "Forest".
