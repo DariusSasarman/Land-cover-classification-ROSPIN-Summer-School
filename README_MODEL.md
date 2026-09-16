@@ -8,10 +8,10 @@ This repository contains training, evaluation, and deployment code for several b
 
 ## 1. Supported Models
 
-| Model | Input / Bands | Accuracy | Macro F1 | Role | Evaluation Report | Weights / Checkpoint |
+| Model | Input / Bands | Accuracy | Macro F1 | Role | Evaluation Report | Weights |
 | :--- | :---: | :---: | :---: | :--- | :--- | :--- |
-| ResNet-18 (RGB) | 3 bands (RGB) | 97% | 0.97 | Production web model | [reports/resnet18_m3_report.txt](reports/resnet18_m3_report.txt) | [model/resnet18_m3_best.pth](model/resnet18_m3_best.pth) |
-| Spectral ResNet-18 (TorchGeo) | 13 bands | 99% | 0.99 | High-accuracy benchmark | [reports/spectral_resnet_torchgeo_report.txt](reports/spectral_resnet_torchgeo_report.txt) | [checkpoints/spectral_resnet_torchgeo_best.pth](checkpoints/spectral_resnet_torchgeo_best.pth) |
+| ResNet-18 (RGB) | 3 bands (RGB) | 97% | 0.97 | Production web model | [reports/resnet18_m3_report.txt](reports/resnet18_m3_report.txt) | [model/resnet18_m3_best.pth](https://huggingface.co/dariussasarman/ROSPIN-Land-Classification/tree/main) |
+| Spectral ResNet-18 (TorchGeo) | 13 bands | 99% | 0.99 | High-accuracy benchmark | [reports/spectral_resnet_torchgeo_report.txt](reports/spectral_resnet_torchgeo_report.txt) | [checkpoints/spectral_resnet_torchgeo_best.pth](https://huggingface.co/Airam18/land-cover-clasification-model-all-bands/tree/main) |
 | ResNet-50 (RGB) | 3 bands (RGB) | 98% | 0.98 | Larger benchmark backbone | [reports/resnet50_report.txt](reports/resnet50_report.txt) | Not packaged in this repository |
 | Spectral Random Forest | Spectral features | 87% | 0.86 | Traditional ML baseline | [reports/spectral_rf_report.txt](reports/spectral_rf_report.txt) | Not packaged in this repository |
 | Baseline Random Forest | Basic features | 80% | 0.78 | Initial ML baseline | [reports/baseline_rf_report.txt](reports/baseline_rf_report.txt) | Not packaged in this repository |
