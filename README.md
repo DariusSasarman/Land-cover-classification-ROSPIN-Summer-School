@@ -18,6 +18,12 @@ This project targets the task of *Land use land cover classification task* using
 
 [demo.webm](https://github.com/user-attachments/assets/480abc95-1484-47cc-8d25-05122838c0c8)
 
+## How do I get it working?
+
+First check "env_tips.md" inside webserver/backend.
+
+After that, from the project root, run "start.bat" (if on windows) or "start_webserver.sh" (if on linux)
+
 ## Pipeline setup steps
 
 ### 0. Switch to virtual environment and install requirements.txt
